@@ -52,6 +52,9 @@ $config = [
         ],
     ],
     'modules' => [
+        'v1' => [
+            'class' => 'app\modules\v1\Module',
+        ],
         'gridview' =>  [
             'class' => '\kartik\grid\Module',
         ]
