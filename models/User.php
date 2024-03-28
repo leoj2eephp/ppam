@@ -100,6 +100,12 @@ class User extends ActiveRecord implements IdentityInterface {
         ];
     }
 
+    public function scenarios() {
+        $scenarios = parent::scenarios();
+        $scenarios['limitedInfo'] = ['username', 'email', 'nombre', 'apellido', 'apellido_casada', 'genero', 'telefono'];
+        return $scenarios;
+    }
+
     /**
      * Gets query for [[Asignacions]].
      *
@@ -140,6 +146,18 @@ class User extends ActiveRecord implements IdentityInterface {
      */
     public static function findByUsername($username) {
         return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
+    }
+
+    public function limitInfo() {
+        unset($this->auth_key);
+        unset($this->password_hash);
+        unset($this->password_reset_token);
+        unset($this->ultima_sesion);
+        unset($this->status);
+        unset($this->created_at);
+        unset($this->updated_at);
+        unset($this->verification_token);
+        unset($this->access_token);
     }
 
     /**

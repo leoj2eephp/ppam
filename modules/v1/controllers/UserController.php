@@ -27,15 +27,16 @@ class UserController extends ActiveController {
             $token = Yii::$app->security->generateRandomString() . '_' . time();
             $user->access_token = $token;
             $user->save();
-    
+            $user->limitInfo();
             return [
                 'status' => 'success',
                 'token' => $token,
+                'user' => $user,
             ];
         } else {
             return [
                 'status' => 'error',
-                'message' => 'Credenciales inválidas',
+                'message' => 'Usuario y/o contraseña incorrectos',
             ];
         }
     }
