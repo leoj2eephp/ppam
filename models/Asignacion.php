@@ -73,6 +73,8 @@ class Asignacion extends \yii\db\ActiveRecord {
                 'apellido' => $model->userId1->apellido,
                 'apellido_casada' => $model->userId1->apellido_casada,
                 'telefono' => $model->userId1->telefono,
+                'genero' => $model->userId1->genero,
+                'email' => $model->userId1->email,
             ];
         };
         $fields['userId2'] = function ($model) {
@@ -83,6 +85,8 @@ class Asignacion extends \yii\db\ActiveRecord {
                 'apellido' => $model->userId2->apellido,
                 'apellido_casada' => $model->userId2->apellido_casada,
                 'telefono' => $model->userId2->telefono,
+                'genero' => $model->userId2->genero,
+                'email' => $model->userId2->email,
             ];
         };
         return $fields;
