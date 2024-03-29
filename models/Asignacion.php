@@ -89,6 +89,24 @@ class Asignacion extends \yii\db\ActiveRecord {
                 'email' => $model->userId2->email,
             ];
         };
+        $fields["punto"] = function ($model) {
+            return [
+                "id" => $model->id,
+                "nombre" => $model->punto->nombre,
+                "latitud" => $model->punto->latitud,
+                "longitud" => $model->punto->longitud,
+                "color" => $model->punto->color,
+            ];
+        };
+        $fields["turno"] = function ($model) {
+            return [
+                "id" => $model->id,
+                "nombre" => $model->turno->nombre,
+                "desde" => $model->turno->desde,
+                "hasta" => $model->turno->hasta,
+            ];
+        };
+        
         return $fields;
     }
 
