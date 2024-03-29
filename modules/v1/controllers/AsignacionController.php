@@ -39,7 +39,7 @@ class AsignacionController extends ActiveController {
         if ($data->confirm2 != null) $asignacion->confirmado2 = (int) $data->confirm2;
 
         if ($asignacion->save()) return true;
-        return join(",", $asignacion->firstErrors);
+        return false;
     }
 
     public function behaviors() {
