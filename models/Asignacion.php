@@ -62,6 +62,32 @@ class Asignacion extends \yii\db\ActiveRecord {
         ];
     }
 
+    public function fields() {
+        $fields = parent::fields();
+        // Incluye los datos relacionados de los usuarios en la respuesta JSON
+        $fields['userId1'] = function ($model) {
+            return [
+                'id' => $model->userId1->id,
+                'username' => $model->userId1->username,
+                'nombre' => $model->userId1->nombre,
+                'apellido' => $model->userId1->apellido,
+                'apellido_casada' => $model->userId1->apellido_casada,
+                'telefono' => $model->userId1->telefono,
+            ];
+        };
+        $fields['userId2'] = function ($model) {
+            return [
+                'id' => $model->userId2->id,
+                'username' => $model->userId2->username,
+                'nombre' => $model->userId2->nombre,
+                'apellido' => $model->userId2->apellido,
+                'apellido_casada' => $model->userId2->apellido_casada,
+                'telefono' => $model->userId2->telefono,
+            ];
+        };
+        return $fields;
+    }
+
     /**
      * Gets query for [[Punto]].
      *
