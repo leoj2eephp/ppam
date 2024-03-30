@@ -35,10 +35,17 @@ class AsignacionController extends ActiveController {
         $postData = file_get_contents('php://input');
         $data = json_decode($postData);
         $asignacion = Asignacion::find()->where("id = :id", [":id" => $data->idAsignacion])->one();
-        if ($data->confirm1 != null) $asignacion->confirmado1 = (int) $data->confirm1;
-        if ($data->confirm2 != null) $asignacion->confirmado2 = (int) $data->confirm2;
+        if ($data->confirm1 !== null)
+            $asignacion->confirmado1 = $data->confirm1;
+        else
+            $asignacion->confirmado1 = null;
+        if ($data->confirm2 !== null)
+            $asignacion->confirmado2 = $data->confirm2;
+        else
+        $asignacion->confirmado2 = null;
 
-        if ($asignacion->save()) return true;
+        if ($asignacion->save())
+            return true;
         return false;
     }
 
