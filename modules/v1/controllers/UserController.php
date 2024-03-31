@@ -41,6 +41,15 @@ class UserController extends ActiveController {
         }
     }
 
+    public function actionSaveToken() {
+        $postData = file_get_contents('php://input');
+        $data = json_decode($postData);
+    
+        $user = User::findOne($data->id);
+        $user->device_token = $data->token;
+        return $user->save();
+    }
+
     public function behaviors() {
         $behaviors = parent::behaviors();
         $behaviors['verbs'] = [
