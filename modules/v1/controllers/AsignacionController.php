@@ -30,6 +30,16 @@ class AsignacionController extends ActiveController {
         return $asignaciones;
     }
 
+    public function actionMisProximasAsignaciones() {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $postData = file_get_contents('php://input');
+        $data = json_decode($postData);
+        $asignaciones = Asignacion::find()->with(["userId1", "userId2"])
+            ->where("(user_id1 = :uid OR user_id2 = :uid) AND fecha >= curdate()", [":uid" => $data->id])
+            ->all();
+        return $asignaciones;
+    }
+
     public function actionConfirmReject() {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $postData = file_get_contents('php://input');
@@ -52,6 +62,7 @@ class AsignacionController extends ActiveController {
             'class' => VerbFilter::class,
             'actions' => [
                 'mis-asignaciones' => ['post'],
+                'mis-proximas-asignaciones' => ['post'],
                 'confirm-reject' => ['post'],
             ],
         ];

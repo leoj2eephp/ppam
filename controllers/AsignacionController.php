@@ -53,7 +53,7 @@ class AsignacionController extends Controller {
 
         // CARGAR TURNOS
         $asignaciones = Asignacion::find()
-            ->where("fecha BETWEEN (SELECT ADDDATE( ADDDATE( LAST_DAY('2024-03-20'), 1), INTERVAL -1 MONTH)) AND ADDDATE( LAST_DAY('2024-03-20'), 1)")
+            ->where("fecha BETWEEN (SELECT ADDDATE( ADDDATE( LAST_DAY(NOW()), 1), INTERVAL -1 MONTH)) AND ADDDATE( LAST_DAY(NOW()), 1)")
             ->all();
         $events = array();
         foreach ($asignaciones as $a) {
