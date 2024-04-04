@@ -20,7 +20,8 @@
         "yiisoft/yii2-symfonymailer": "~2.0.3",
         "hail812/yii2-adminlte3": "~1.1",
         "kartik-v/yii2-editable": "dev-master",
-        "philippfrenzel/yii2fullcalendar": "3.6.7"
+        "philippfrenzel/yii2fullcalendar": "3.6.7",
+        "google/apiclient": "2.15.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

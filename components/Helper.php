@@ -1,12 +1,8 @@
 <?php
-
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 namespace app\components;
+
+use Exception;
+use Google;
 
 /**
  * Validates that a rut has a correct format and is a valid rut 
@@ -188,7 +184,7 @@ class Helper {
             exit;
         }
     }
-    
+
     public static function checkEmailList($email) {
         $validator = new \yii\validators\EmailValidator;
         return $validator->validate($email);
@@ -207,10 +203,17 @@ class Helper {
             return $el_terrible_nuevo_formato;
         }
     }
-    
+
     public static function formatToDBDate($la_terrible_fecha) {
         if (!empty($la_terrible_fecha)) {
             $el_terrible_nuevo_formato = date("Y-m-d", strtotime($la_terrible_fecha));
+            return $el_terrible_nuevo_formato;
+        }
+    }
+
+    public static function formatToHourMinute($la_terrible_fecha) {
+        if (!empty($la_terrible_fecha)) {
+            $el_terrible_nuevo_formato = date("H:i", strtotime($la_terrible_fecha));
             return $el_terrible_nuevo_formato;
         }
     }
@@ -221,16 +224,57 @@ class Helper {
             return $el_terrible_nuevo_formato;
         }
     }
-    
+
     public static function formatRutToElectronicTicket($el_manso_rut) {
         return str_replace(".", "", $el_manso_rut);
     }
-    
+
     public static function formatToFullRut($elMansoRut) {
         $rut = explode("-", $elMansoRut);
         $largo = strlen($rut[0]);
         return substr($rut[0], 0, $largo - 6) . "." . substr($rut[0], $largo - 6, 3) . "." . substr($rut[0], $largo - 3, 3) . "-" . $rut[1];
     }
     
+    function getAccessToken() {
+        try {
+            $client = new Google\Client();
+            $dirPath = getenv('GOOGLE_APPLICATION_CREDENTIALS');
+            $client->setAuthConfig($dirPath);
+            $client->addScope("https://www.googleapis.com/auth/firebase.messaging");
+            $accessToken = $client->fetchAccessTokenWithAssertion()["access_token"];
+            return $accessToken;
+        } catch (Exception $ex) {
+            print($ex);
+            return "";
+        }
+    }
+
+    public static function sendNotificationPush2($title, $body, $deviceToken) {
+        $url = "https://fcm.googleapis.com/v1/projects/ppam-562e6/messages:send";
+        $accessToken = self::getAccessToken();
+        $headers = [
+            "Content-Type: application/json; UTF-8",
+            "Authorization: Bearer " . $accessToken
+        ];
+        $notification = ["title" => $title, "body" => $body];
+
+        $fields["message"] = array(
+            'token' => $deviceToken,
+            'notification' => $notification,
+        );
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
+        $result = curl_exec($ch);
+        if ($result === FALSE) {
+            echo "FCM Send Error: " . curl_error($ch);
+        }
+        curl_close($ch);
+    }
 }
- 

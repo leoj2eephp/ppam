@@ -19,8 +19,8 @@ use Yii;
  *
  * @property Punto $punto
  * @property Turno $turno
- * @property User $userId1
- * @property User $userId2
+ * @property User $user1
+ * @property User $user2
  */
 class Asignacion extends \yii\db\ActiveRecord {
     /**
@@ -65,28 +65,28 @@ class Asignacion extends \yii\db\ActiveRecord {
     public function fields() {
         $fields = parent::fields();
         // Incluye los datos relacionados de los usuarios en la respuesta JSON
-        $fields['userId1'] = function ($model) {
+        $fields['user1'] = function ($model) {
             return [
-                'id' => $model->userId1->id,
-                'username' => $model->userId1->username,
-                'nombre' => $model->userId1->nombre,
-                'apellido' => $model->userId1->apellido,
-                'apellido_casada' => $model->userId1->apellido_casada,
-                'telefono' => $model->userId1->telefono,
-                'genero' => $model->userId1->genero,
-                'email' => $model->userId1->email,
+                'id' => $model->user1->id,
+                'username' => $model->user1->username,
+                'nombre' => $model->user1->nombre,
+                'apellido' => $model->user1->apellido,
+                'apellido_casada' => $model->user1->apellido_casada,
+                'telefono' => $model->user1->telefono,
+                'genero' => $model->user1->genero,
+                'email' => $model->user1->email,
             ];
         };
-        $fields['userId2'] = function ($model) {
+        $fields['user2'] = function ($model) {
             return [
-                'id' => $model->userId2->id,
-                'username' => $model->userId2->username,
-                'nombre' => $model->userId2->nombre,
-                'apellido' => $model->userId2->apellido,
-                'apellido_casada' => $model->userId2->apellido_casada,
-                'telefono' => $model->userId2->telefono,
-                'genero' => $model->userId2->genero,
-                'email' => $model->userId2->email,
+                'id' => $model->user2->id,
+                'username' => $model->user2->username,
+                'nombre' => $model->user2->nombre,
+                'apellido' => $model->user2->apellido,
+                'apellido_casada' => $model->user2->apellido_casada,
+                'telefono' => $model->user2->telefono,
+                'genero' => $model->user2->genero,
+                'email' => $model->user2->email,
             ];
         };
         $fields["punto"] = function ($model) {
@@ -129,20 +129,20 @@ class Asignacion extends \yii\db\ActiveRecord {
     }
 
     /**
-     * Gets query for [[UserId1]].
+     * Gets query for [[user1]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getUserId1() {
+    public function getUser1() {
         return $this->hasOne(User::class, ['id' => 'user_id1']);
     }
 
     /**
-     * Gets query for [[UserId2]].
+     * Gets query for [[user2]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getUserId2() {
+    public function getUser2() {
         return $this->hasOne(User::class, ['id' => 'user_id2']);
     }
 }

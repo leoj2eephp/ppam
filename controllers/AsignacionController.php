@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\components\Helper;
 use app\models\EventJS;
 use app\models\Asignacion;
 use app\models\AsignacionSearch;
@@ -92,6 +93,11 @@ class AsignacionController extends Controller {
         $asignacion->punto_id = $data["punto"];
 
         if ($asignacion->save()) {
+            // Levantar notificación
+            $mensaje = "Ha sido asignado a " . $asignacion->punto->nombre . " a las " . Helper::formatToHourMinute($asignacion->turno->desde) .
+                        " hrs. para el día " . Helper::formatToLocalDate($asignacion->fecha) . ". Toque aquí para más detalles.";
+            Helper::sendNotificationPush2("Nuevo turno PPAM", $mensaje, $asignacion->user1->device_token);
+            Helper::sendNotificationPush2("Nuevo turno PPAM", $mensaje, $asignacion->user2->device_token);
             return "OK";
         } else {
             return join(", ", $asignacion->firstErrors);
