@@ -98,7 +98,7 @@ class AsignacionController extends Controller {
                         " hrs. para el día " . Helper::formatToLocalDate($asignacion->fecha) . ". Toque aquí para más detalles.";
             Helper::sendNotificationPush2("Nuevo turno PPAM", $mensaje, $asignacion->user1->device_token);
             Helper::sendNotificationPush2("Nuevo turno PPAM", $mensaje, $asignacion->user2->device_token);
-            return "OK";
+            return $asignacion;
         } else {
             return join(", ", $asignacion->firstErrors);
         }

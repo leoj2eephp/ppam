@@ -13,6 +13,7 @@ use yii\helpers\Url;
       <?php
       echo \yii2fullcalendar\yii2fullcalendar::widget(array(
         'events' => $events,
+        "options" => ["id" => "calendar",],
         'clientOptions' => [
           'locale' => 'es',
           "dayClick" => new \yii\web\JsExpression('function(date, jsEvent, view) {
@@ -49,11 +50,32 @@ use yii\helpers\Url;
                             allowOutsideClick: () => !Swal.isLoading()
                           }).then((result) => {
                             if (result.isConfirmed) {
-                              if (result.value == "OK") {
+                              if (result.value !== "ERROR") {
+                                const asignacion = result.value;
+                                const calendar = $("#calendar").fullCalendar("getCalendar");
+                                const newEvent = {
+                                  id: asignacion.id,
+                                  title: asignacion.punto.nombre + " " + asignacion.turno.nombre,
+                                  start: asignacion.fecha + " " + asignacion.turno.desde,
+                                  end: asignacion.fecha + " " + asignacion.turno.hasta,
+                                  color: asignacion.punto.color,
+                                };
+                                calendar.renderEvent(newEvent);
+                                
+                                const casada1 = asignacion.user1.apellido_casada ?? "";
+                                const casada2 = asignacion.user2.apellido_casada ?? "";
+                                const nombreCompleto1 = casada1 !== "" ?
+                                  asignacion.user1.nombre + " " + asignacion.user1.apellido + " de " + casada1 : 
+                                  asignacion.user1.nombre + " " + asignacion.user1.apellido;
+                                const nombreCompleto2 = casada2 !== "" ?
+                                  asignacion.user2.nombre + " " + asignacion.user2.apellido + " de " + casada2 : 
+                                  asignacion.user2.nombre + " " + asignacion.user2.apellido;
                                 Swal.fire({
                                   title: "Turno creado exitosamente!",
                                   icon: "success",
-                                  text: result.value
+                                  html: "<p>Se creó el turno para el día " + asignacion.fecha + "<br />" +
+                                  "Se ha asignado a los siguientes voluntarios: </p>" +
+                                  "<ul><li>" + nombreCompleto1 + "</li><li>" + nombreCompleto2 + "</li>",
                                 });
                               } else {
                                 Swal.fire({
@@ -65,7 +87,7 @@ use yii\helpers\Url;
                             }
                           });                          
                     }'),
-          "eventClick" => new \yii\web\JsExpression('function(calEvent, jsEvent, view) {
+                    "eventClick" => new \yii\web\JsExpression('function(calEvent, jsEvent, view) {
                       Swal.fire({
                         title: calEvent.title,
                         // icon: "danger",
