@@ -25,7 +25,7 @@ class AsignacionController extends ActiveController {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $postData = file_get_contents('php://input');
         $data = json_decode($postData);
-        $asignaciones = Asignacion::find()->with(["userId1", "userId2"])
+        $asignaciones = Asignacion::find()->with(["user1", "user2"])
             ->where("user_id1 = :uid OR user_id2 = :uid", [":uid" => $data->id])->all();
         return $asignaciones;
     }
@@ -34,7 +34,7 @@ class AsignacionController extends ActiveController {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $postData = file_get_contents('php://input');
         $data = json_decode($postData);
-        $asignaciones = Asignacion::find()->with(["userId1", "userId2"])
+        $asignaciones = Asignacion::find()->with(["user1", "user2"])
             ->where("(user_id1 = :uid OR user_id2 = :uid) AND fecha >= curdate()", [":uid" => $data->id])
             ->all();
         return $asignaciones;
