@@ -4,15 +4,13 @@ use kartik\form\ActiveForm;
 use yii\helpers\Html;
 
 /** @var yii\web\View $this */
-/** @var common\models\User $model */
+/** @var app\models\Disponibilidad $model */
 
-$this->title = 'Actualizar User: ' . $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Users', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Actualizar';
+$this->title = 'Create Disponibilidad';
+$this->params['breadcrumbs'][] = ['label' => 'Disponibilidads', 'url' => ['index']];
+$this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="user-update">
-
+<div class="disponibilidad-create">
     <div class="card card-info">
         <div class="card-header with-border">
             <h3 class="card-title"><?= Html::encode($this->title) ?></h3>
@@ -32,6 +30,7 @@ $this->params['breadcrumbs'][] = 'Actualizar';
         ]);
         ?>
         <div class="card-body">
+            <?= app\components\Alert::widget() ?>
             <?=
             $this->render('_form', [
                 'model' => $model,
@@ -40,11 +39,9 @@ $this->params['breadcrumbs'][] = 'Actualizar';
             ?>
         </div>
         <div class="card-footer">
-            <?= Html::submitButton('Actualizar', ['class' => 'btn btn-success']) ?>
+            <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
         </div>
         <?php ActiveForm::end(); ?>
     </div>
-
-</div>
 
 </div>

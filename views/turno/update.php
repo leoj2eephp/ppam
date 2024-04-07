@@ -1,18 +1,19 @@
 <?php
+
 use kartik\form\ActiveForm;
 use yii\helpers\Html;
 
 /** @var yii\web\View $this */
 /** @var common\models\Turno $model */
 
-$this->title = 'Update Turno: ' . $model->id;
+$this->title = 'Actualizar Turno: ' . $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Turnos', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';
 ?>
 <div class="turno-update">
 
-<div class="card card-info">
+    <div class="card card-info">
         <div class="card-header with-border">
             <h3 class="card-title"><?= Html::encode($this->title) ?></h3>
         </div>

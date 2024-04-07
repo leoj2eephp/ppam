@@ -1,21 +1,50 @@
 <?php
 
+use kartik\form\ActiveForm;
 use yii\helpers\Html;
 
 /** @var yii\web\View $this */
 /** @var common\models\Asignacion $model */
 
-$this->title = 'Update Asignacion: ' . $model->id;
+$this->title = 'Actualizar Asignacion: ' . $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Asignacions', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';
 ?>
 <div class="asignacion-update">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+<div class="card card-info">
+        <div class="card-header with-border">
+            <h3 class="card-title"><?= Html::encode($this->title) ?></h3>
+        </div>
+        <?php
+        $form = ActiveForm::begin([
+            'type' => ActiveForm::TYPE_HORIZONTAL,
+            'formConfig' => [
+                'labelSpan' => 3, 'deviceSize' => ActiveForm::SIZE_LARGE
+            ],
+            'fieldConfig' => [
+                'options' => [
+                    'class' => 'col-sm-11 form-group',
+                    'tag' => 'div'
+                ]
+            ],
+        ]);
+        ?>
+        <div class="card-body">
+            <?=
+            $this->render('_form', [
+                'model' => $model,
+                'form' => $form,
+            ])
+            ?>
+        </div>
+        <div class="card-footer">
+            <?= Html::submitButton('Actualizar', ['class' => 'btn btn-success']) ?>
+        </div>
+        <?php ActiveForm::end(); ?>
+    </div>
 
-    <?= $this->render('_form', [
-        'model' => $model,
-    ]) ?>
+</div>
 
 </div>

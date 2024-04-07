@@ -65,14 +65,22 @@ $this->params['breadcrumbs'][] = $this->title;
                         },
                     ],
                     'created_at:date',
-                    //'updated_at',
-                    //'verification_token',
                     [
+                        'class' => 'kartik\grid\ActionColumn',
+                        'template' => '{disponibilidad} {update} {delete}',
+                        'buttons' => [
+                            'disponibilidad' => function ($url, $model, $key) {
+                                // Puedes personalizar el botón de la nueva acción aquí
+                                return Html::a('<span class="fas fa-calendar"></span>', ['disponibilidad/update', 'id' => $model->id], ["title" => "Cambiar Disponibilidad"]);
+                            },
+                        ],
+                    ],
+                    /* [
                         'class' => ActionColumn::class,
                         'urlCreator' => function ($action, User $model, $key, $index, $column) {
                             return Url::toRoute([$action, 'id' => $model->id]);
                         }
-                    ],
+                    ], */
                 ],
             ]); ?>
         </div>

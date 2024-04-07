@@ -12,10 +12,11 @@
                 'items' => [
                     ['label' => 'Administración', 'header' => true],
                     ['label' => 'Login', 'url' => ['site/login'], 'icon' => 'sign-in-alt', 'visible' => Yii::$app->user->isGuest],
-                    ['label' => 'Asignaciones', 'url' => ['asignacion/index'], 'icon' => 'calendar', 'visible' => true],
-                    ['label' => 'Puntos', 'url' => ['punto/index'], 'icon' => 'map-pin', 'visible' => true],
-                    ['label' => 'Turnos', 'url' => ['turno/index'], 'icon' => 'clock', 'visible' => true],
-                    ['label' => 'Usuarios', 'url' => ['user/index'], 'icon' => 'user', 'visible' => true],
+                    ['label' => 'Asignaciones', 'url' => ['asignacion/index'], 'icon' => 'calendar', 'visible' => !Yii::$app->user->isGuest],
+                    ['label' => 'Puntos', 'url' => ['punto/index'], 'icon' => 'map-pin', 'visible' => !Yii::$app->user->isGuest],
+                    ['label' => 'Turnos', 'url' => ['turno/index'], 'icon' => 'clock', 'visible' => !Yii::$app->user->isGuest],
+                    ['label' => 'Usuarios', 'url' => ['user/index'], 'icon' => 'user', 'visible' => !Yii::$app->user->isGuest],
+                    ['label' => 'Disponibilidad', 'url' => ['disponibilidad/index'], 'icon' => 'check', 'visible' => false],
                     // ['label' => 'Informational', 'iconStyle' => 'far', 'iconClassAdded' => 'text-info'],
                 ],
             ]);

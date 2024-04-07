@@ -30,7 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ]);
         ?>
         <div class="card-body">
-            <?= backend\components\Alert::widget() ?>
+            <?= app\components\Alert::widget() ?>
             <?=
             $this->render('_form', [
                 'model' => $model,
