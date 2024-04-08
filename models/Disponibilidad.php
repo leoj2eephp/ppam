@@ -48,6 +48,23 @@ class Disponibilidad extends \yii\db\ActiveRecord {
         ];
     }
 
+    public function fields() {
+        $fields = parent::fields();
+        // Incluye los datos relacionados de los usuarios en la respuesta JSON
+        $fields['turno'] = function ($model) {
+            return [
+                'id' => $model->turno->id,
+                'nombre' => $model->turno->nombre,
+                'desde' => $model->turno->desde,
+                'hasta' => $model->turno->hasta,
+                'estado' => $model->turno->estado,
+                'orden' => $model->turno->orden,
+            ];
+        };
+        
+        return $fields;
+    }
+
     /**
      * Gets query for [[Turno]].
      *

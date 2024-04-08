@@ -5,6 +5,7 @@ namespace app\modules\v1\controllers;
 use app\models\Dias;
 use app\models\Disponibilidad;
 use Yii;
+use yii\db\Query;
 use yii\filters\VerbFilter;
 use yii\rest\ActiveController;
 use yii\web\Response;
@@ -24,10 +25,12 @@ class DisponibilidadController extends ActiveController {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $postData = file_get_contents('php://input');
         $data = json_decode($postData);
-        $disponibilidades = Disponibilidad::find()->where(
+        $disponibilidades = Disponibilidad::find()
+        ->join("INNER JOIN", "turno t", "t.id = disponibilidad.turno_id")->where(
             "user_id = :userId",
             [":userId" => $data->userId]
-        )->all();
+        )->orderBy(["dia" => SORT_ASC, "t.orden" => SORT_ASC])->all();
+
         return $disponibilidades;
     }
 
