@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use Exception;
 use Yii;
 
 /**
@@ -83,5 +84,19 @@ class Turno extends \yii\db\ActiveRecord {
 
     public function getHorario() {
         return $this->nombre . " (" . substr($this->desde, 0, 5) . "-" . substr($this->hasta, 0, 5) . ")";
+    }
+
+    public function crearDisponibilidadUsuarios() {
+        $usuarios = User::find()->where("username != 'admin'")->all();
+        foreach ($usuarios as $user) {
+            foreach (Dias::getAll() as $dia) {
+                $disponibilidad = new Disponibilidad();
+                $disponibilidad->user_id = $user->id;
+                $disponibilidad->turno_id = $this->id;
+                $disponibilidad->estado = 0;
+                $disponibilidad->dia = Dias::getIntDay($dia);
+                if (!$disponibilidad->save()) throw new Exception(join(",", $disponibilidad->getFirstErrors()));
+            }
+        }
     }
 }

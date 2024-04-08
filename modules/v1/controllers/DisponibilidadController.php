@@ -2,6 +2,7 @@
 
 namespace app\modules\v1\controllers;
 
+use app\models\Dias;
 use app\models\Disponibilidad;
 use Yii;
 use yii\filters\VerbFilter;
@@ -53,6 +54,11 @@ class DisponibilidadController extends ActiveController {
         }
     }
 
+    public function actionDias() {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        return Dias::getIntDay("Viernes");
+    }
+
     public function behaviors() {
         $behaviors = parent::behaviors();
         $behaviors['verbs'] = [
@@ -60,6 +66,7 @@ class DisponibilidadController extends ActiveController {
             'actions' => [
                 'mi-disponibilidad' => ['post'],
                 'update-turno-dia' => ['post'],
+                "dias" => ["get"],
             ],
         ];
         return $behaviors;

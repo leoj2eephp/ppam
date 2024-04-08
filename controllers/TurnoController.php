@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\Turno;
 use app\models\TurnoSearch;
+use Exception;
 use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -67,10 +68,16 @@ class TurnoController extends Controller {
         $model->scenario = "save";
         if ($this->request->isPost) {
             if ($model->load($this->request->post())) {
-                $orden = Turno::find()->select("MAX(orden) as max_orden")->scalar();
-                $model->orden = ++$orden;
-                if ($model->save()) return $this->redirect(['index']);
-                else \Yii::$app->session->setFlash("danger", join($model->getFirstErrors()));
+                try {
+                    $orden = Turno::find()->select("MAX(orden) as max_orden")->scalar();
+                    $model->orden = ++$orden;
+                    if ($model->save()) {
+                        $model->crearDisponibilidadUsuarios();
+                        return $this->redirect(['index']);
+                    } else \Yii::$app->session->setFlash("danger", join($model->getFirstErrors()));
+                } catch (Exception $ex) {
+                    \Yii::$app->session->setFlash("danger", join($model->getFirstErrors()));
+                }
             }
         } else {
             $model->loadDefaultValues();

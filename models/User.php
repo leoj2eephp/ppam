@@ -287,6 +287,9 @@ class User extends ActiveRecord implements IdentityInterface {
             $this->updated_at = time();
             if ($this->save()) {
                 if ($this->save()) {
+                    // $this->asignarRolesPermisos();
+                    // Crear todas las disponibilidades
+                    $this->asignarDisponibilidad();
                     // Enviar correo y hacer los pasos respectivos para finalizar la creación del usuario
                     \Yii::$app->session->setFlash("success", "Usuario creado exitosamente!");
                     $transaction->commit();
@@ -299,6 +302,33 @@ class User extends ActiveRecord implements IdentityInterface {
         } catch (Exception $ex) {
             \Yii::$app->session->setFlash("danger", "Hubo un problema: " . $ex->getMessage());
             $transaction->rollBack();
+        }
+    }
+
+    /* private function asignarRolesPermisos() {
+        $auth = \Yii::$app->authManager;
+        $authorRole = $auth->getRole("usuario");
+        $auth->assign($authorRole, $this->id);
+        $funciones = \app\models\AuthItemChild::find()->where(['parent' => "usuario"])->select(['child'])->all();
+        foreach ($funciones as $funcion) {
+            $permiso = new \app\models\AuthAssignment();
+            $permiso->user_id = $this->id;
+            $permiso->item_name = $funcion;
+            $permiso->save();
+        }
+    } */
+
+    private function asignarDisponibilidad() {
+        foreach (Dias::getAll() as $dia) {
+            $turnos = Turno::find()->orderBy("orden")->all();
+            foreach ($turnos as $turno) {
+                $disponibilidad = new Disponibilidad();
+                $disponibilidad->user_id = $this->id;
+                $disponibilidad->turno_id = $turno->id;
+                $disponibilidad->estado = 0;
+                $disponibilidad->dia = Dias::getIntDay($dia);
+                if (!$disponibilidad->save()) throw new Exception(join(",", $disponibilidad->getFirstErrors()));
+            }
         }
     }
 

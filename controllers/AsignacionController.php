@@ -68,7 +68,7 @@ class AsignacionController extends Controller {
         }
         $turnos = Turno::findAll(["estado" => 1]);
         $puntos = Punto::find()->all();
-        $usuarios = User::find(["state" => User::STATUS_ACTIVE])->all();
+        $usuarios = User::find()->where("status = :estado AND username != 'admin'", [":estado" => User::STATUS_ACTIVE])->all();
 
         return $this->render('index', [
             'searchModel' => $searchModel,
