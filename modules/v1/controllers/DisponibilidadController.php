@@ -26,10 +26,10 @@ class DisponibilidadController extends ActiveController {
         $postData = file_get_contents('php://input');
         $data = json_decode($postData);
         $disponibilidades = Disponibilidad::find()
-        ->join("INNER JOIN", "turno t", "t.id = disponibilidad.turno_id")->where(
-            "user_id = :userId",
-            [":userId" => $data->userId]
-        )->orderBy(["dia" => SORT_ASC, "t.orden" => SORT_ASC])->all();
+            ->join("INNER JOIN", "turno t", "t.id = disponibilidad.turno_id")->where(
+                "user_id = :userId",
+                [":userId" => $data->userId]
+            )->orderBy(["dia" => SORT_ASC, "t.orden" => SORT_ASC])->all();
 
         return $disponibilidades;
     }
@@ -57,6 +57,22 @@ class DisponibilidadController extends ActiveController {
         }
     }
 
+    public function actionChangeAvailability() {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $postData = file_get_contents('php://input');
+        $data = json_decode($postData);
+        $disponibilidad = Disponibilidad::find()->where(
+            "user_id = :userId AND id = :dispoId",
+            [":userId" => $data->userId, ":dispoId" => $data->dispoId]
+        )->one();
+        if ($disponibilidad != null) {
+            $disponibilidad->estado = $data->estado;
+            return $disponibilidad->save();
+        } else {
+            return false;
+        }
+    }
+
     public function actionDias() {
         Yii::$app->response->format = Response::FORMAT_JSON;
         return Dias::getIntDay("Viernes");
@@ -69,6 +85,7 @@ class DisponibilidadController extends ActiveController {
             'actions' => [
                 'mi-disponibilidad' => ['post'],
                 'update-turno-dia' => ['post'],
+                'change-availability' => ['post'],
                 "dias" => ["get"],
             ],
         ];
