@@ -2,15 +2,13 @@
 
 use app\models\User;
 use yii\helpers\Html;
-use yii\helpers\Url;
-use yii\grid\ActionColumn;
 use kartik\grid\GridView;
 
 /** @var yii\web\View $this */
 /** @var app\models\UserSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Users';
+$this->title = 'Usuarios';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-index">
@@ -46,7 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     ],
                     'telefono',
                     'email:email',
-                    'ultima_sesion:datetime',
+                    // 'ultima_sesion:datetime',
                     [
                         'attribute' => 'status',
                         'label' => 'Estado',
@@ -64,23 +62,18 @@ $this->params['breadcrumbs'][] = $this->title;
                             }
                         },
                     ],
-                    'created_at:date',
+                    // 'created_at:date',
                     [
                         'class' => 'kartik\grid\ActionColumn',
                         'template' => '{disponibilidad} {update} {delete}',
                         'buttons' => [
                             'disponibilidad' => function ($url, $model, $key) {
-                                // Puedes personalizar el botón de la nueva acción aquí
-                                return Html::a('<span class="fas fa-calendar"></span>', ['disponibilidad/update', 'id' => $model->id], ["title" => "Cambiar Disponibilidad"]);
+                                if ($model->username !== "admin") {
+                                    return Html::a('<span class="fas fa-calendar"></span>', ['disponibilidad/update', 'id' => $model->id], ["title" => "Cambiar Disponibilidad"]);
+                                }
                             },
                         ],
                     ],
-                    /* [
-                        'class' => ActionColumn::class,
-                        'urlCreator' => function ($action, User $model, $key, $index, $column) {
-                            return Url::toRoute([$action, 'id' => $model->id]);
-                        }
-                    ], */
                 ],
             ]); ?>
         </div>

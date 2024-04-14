@@ -6,8 +6,8 @@ use yii\helpers\Html;
 /** @var yii\web\View $this */
 /** @var app\models\Disponibilidad $model */
 
-$this->title = 'Create Disponibilidad';
-$this->params['breadcrumbs'][] = ['label' => 'Disponibilidads', 'url' => ['index']];
+$this->title = 'Crear Disponibilidad';
+$this->params['breadcrumbs'][] = ['label' => 'Disponibilidades', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="disponibilidad-create">

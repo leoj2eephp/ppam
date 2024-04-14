@@ -1,6 +1,5 @@
 <?php
 
-use app\models\Punto;
 use yii\helpers\Html;
 use kartik\grid\GridView;
 

@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /** @var yii\web\View $this */
 /** @var common\models\Turno $model */
 
-$this->title = 'Create Turno';
+$this->title = 'Crear Turno';
 $this->params['breadcrumbs'][] = ['label' => 'Turnos', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

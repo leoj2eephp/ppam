@@ -8,8 +8,7 @@ use yii\helpers\Html;
 
 $this->title = 'Actualizar Turno: ' . $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Turnos', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->params['breadcrumbs'][] = 'Actualizar';
 ?>
 <div class="turno-update">
 

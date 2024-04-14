@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /** @var yii\web\View $this */
 /** @var common\models\Punto $model */
 
-$this->title = 'Create Punto';
+$this->title = 'Crear Punto';
 $this->params['breadcrumbs'][] = ['label' => 'Puntos', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

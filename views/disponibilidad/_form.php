@@ -42,7 +42,7 @@ $script = <<< JS
             const [turnoId, dia] = $(this).attr("id").split("_");
             const checkSwitch = $(this);
             var jsondata = {
-                userId:  $id,
+                userId:  $user->id,
                 turnoId: turnoId,
                 estado: $(this).is(":checked"),
                 dia: dia,

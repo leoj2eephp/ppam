@@ -6,6 +6,7 @@ use app\models\Dias;
 use app\models\Disponibilidad;
 use app\models\DisponibilidadSearch;
 use app\models\Turno;
+use app\models\User;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -87,6 +88,8 @@ class DisponibilidadController extends Controller {
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionUpdate($id) {
+        $user = User::find()->where(["id" => $id])->one();
+        $user->limitInfo();
         $model = Disponibilidad::find()->joinWith(["user", "turno"])
             ->where("user_id = :userId AND disponibilidad.estado = 1", [":userId" => $id])
             ->addOrderBy(["turno.orden" => SORT_ASC])
@@ -98,25 +101,22 @@ class DisponibilidadController extends Controller {
             $turnos_x_dia[$indice] = ["turno_id" => $turno->id, "desde" => $turno->desde, "hasta" => $turno->hasta];
             foreach (Dias::getAll() as $keyDia => $dia) {
                 $estado = 0;
-                foreach ($model as $dispo) {
-                    if ($dispo->dia == $keyDia && $turno->id == $dispo->turno_id) {
-                        $estado = 1;
+                if (sizeof($model) > 0) {
+                    foreach ($model as $dispo) {
+                        if ($dispo->dia == $keyDia && $turno->id == $dispo->turno_id) {
+                            $estado = 1;
+                        }
                     }
                 }
                 $valores = ["keyDia" => $keyDia, "dia" => $dia, "estado" => $estado];
                 $turnos_x_dia[$indice]["valores"][$keyDia] = $valores;
             }
         }
-
-        /* echo "<pre>";
-        print_r($turnos_x_dia);
-        die; */
-
+        
         return $this->render('update', [
             'model' => $model,
-            "id" => $id,
+            "user" => $user,
             "turnos_x_dia" => $turnos_x_dia,
-            "nombre_completo" => $model[0]->user->nombre . " " . $model[0]->user->apellido
         ]);
     }
 

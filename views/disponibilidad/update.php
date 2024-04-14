@@ -4,7 +4,9 @@ use yii\helpers\Html;
 
 /** @var yii\web\View $this */
 /** @var app\models\Disponibilidad $model */
-$this->title = "Modificar disponibilidad de " . $nombre_completo;
+$this->title = "Modificar disponibilidad de " . $user->nombre . " " . $user->apellido;
+// $this->params['breadcrumbs'][] = ['label' => 'Disponibilidades', 'url' => ['index']];
+$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="disponibilidad-update">
 
@@ -17,7 +19,7 @@ $this->title = "Modificar disponibilidad de " . $nombre_completo;
             <?=
             $this->render('_form', [
                 'model' => $model,
-                "id" => $id,
+                "user" => $user,
                 "turnos_x_dia" => $turnos_x_dia,
             ])
             ?>
