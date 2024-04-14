@@ -4,7 +4,7 @@ use yii\helpers\Html;
 
 /** @var yii\web\View $this */
 /** @var app\models\Disponibilidad $model */
-
+$this->title = "Modificar disponibilidad de " . $nombre_completo;
 ?>
 <div class="disponibilidad-update">
 
@@ -18,12 +18,9 @@ use yii\helpers\Html;
             $this->render('_form', [
                 'model' => $model,
                 "id" => $id,
-                "turnos" => $turnos,
+                "turnos_x_dia" => $turnos_x_dia,
             ])
             ?>
-        </div>
-        <div class="card-footer">
-            <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
         </div>
     </div>
 </div>

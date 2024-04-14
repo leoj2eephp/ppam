@@ -20,46 +20,19 @@ Disponibilidad
         </tr>
     </thead>
     <tbody>
-        <?php foreach ($turnos as $turno) : ?>
+        <?php foreach ($turnos_x_dia as $tr) { ?>
             <tr>
-                <td><?= Helper::formatToHourMinute($turno->desde) . " - " . Helper::formatToHourMinute($turno->hasta) ?></td>
-                <td><label class="switch">
-                        <input type="checkbox" id="<?= $turno->id . "_1" ?>">
-                        <span class="slider round"></span>
-                    </label>
-                </td>
-                <td><label class="switch">
-                        <input type="checkbox" id="<?= $turno->id . "_2" ?>">
-                        <span class="slider round"></span>
-                    </label>
-                </td>
-                <td><label class="switch">
-                        <input type="checkbox" id="<?= $turno->id . "_3" ?>">
-                        <span class="slider round"></span>
-                    </label>
-                </td>
-                <td><label class="switch">
-                        <input type="checkbox" id="<?= $turno->id . "_4" ?>">
-                        <span class="slider round"></span>
-                    </label>
-                </td>
-                <td><label class="switch">
-                        <input type="checkbox" id="<?= $turno->id . "_5" ?>">
-                        <span class="slider round"></span>
-                    </label>
-                </td>
-                <td><label class="switch">
-                        <input type="checkbox" id="<?= $turno->id . "_6" ?>">
-                        <span class="slider round"></span>
-                    </label>
-                </td>
-                <td><label class="switch">
-                        <input type="checkbox" id="<?= $turno->id . "_7" ?>">
-                        <span class="slider round"></span>
-                    </label>
-                </td>
+                <td><?= Helper::formatToHourMinute($tr["desde"]) . " - " . Helper::formatToHourMinute($tr["hasta"]) ?></td>
+                <?php foreach ($tr["valores"] as $valores) { ?>
+                    <td><label class="switch">
+                            <input type="checkbox" id="<?= $tr["turno_id"] . "_" . $valores["keyDia"] ?>" 
+                                <?= $valores["estado"] == 1 ? "checked" : "" ?>>
+                            <span class="slider round"></span>
+                        </label>
+                    </td>
+                <?php } ?>
             </tr>
-        <?php endforeach ?>
+        <?php } ?>
     </tbody>
 </table>
 <?php
@@ -79,7 +52,10 @@ $script = <<< JS
                 type: "post",
                 data: { json: JSON.stringify(jsondata) },
                 success: function(data) {
-                    console.log("Realizado");
+                    if (data !== "OK") {
+                        const estado = $(checkSwitch).is(":checked");
+                        $(checkSwitch).prop('checked', !estado);
+                    }
                 },
                 error: function(xhr, status, error) {
                     const estado = $(checkSwitch).is(":checked");

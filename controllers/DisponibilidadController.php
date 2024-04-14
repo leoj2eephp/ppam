@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Dias;
 use app\models\Disponibilidad;
 use app\models\DisponibilidadSearch;
 use app\models\Turno;
@@ -86,17 +87,36 @@ class DisponibilidadController extends Controller {
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionUpdate($id) {
-        $model = Disponibilidad::find()->where("user_id = :userId", [":userId" => $id])->one();
-
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
+        $model = Disponibilidad::find()->joinWith(["user", "turno"])
+            ->where("user_id = :userId AND disponibilidad.estado = 1", [":userId" => $id])
+            ->addOrderBy(["turno.orden" => SORT_ASC])
+            ->all();
+            
+        $turnos_x_dia = [];
+        $turnos = Turno::find()->with("asignacions")->orderBy("orden")->all();
+        foreach ($turnos as $indice => $turno) {
+            $turnos_x_dia[$indice] = ["turno_id" => $turno->id, "desde" => $turno->desde, "hasta" => $turno->hasta];
+            foreach (Dias::getAll() as $keyDia => $dia) {
+                $estado = 0;
+                foreach ($model as $dispo) {
+                    if ($dispo->dia == $keyDia && $turno->id == $dispo->turno_id) {
+                        $estado = 1;
+                    }
+                }
+                $valores = ["keyDia" => $keyDia, "dia" => $dia, "estado" => $estado];
+                $turnos_x_dia[$indice]["valores"][$keyDia] = $valores;
+            }
         }
 
-        $turnos = Turno::find()->with("asignacions")->orderBy("orden")->all();
+        /* echo "<pre>";
+        print_r($turnos_x_dia);
+        die; */
+
         return $this->render('update', [
             'model' => $model,
             "id" => $id,
-            "turnos" => $turnos,
+            "turnos_x_dia" => $turnos_x_dia,
+            "nombre_completo" => $model[0]->user->nombre . " " . $model[0]->user->apellido
         ]);
     }
 
@@ -108,7 +128,7 @@ class DisponibilidadController extends Controller {
                 [":userId" => $data->userId, ":turnoId" => $data->turnoId, ":dia" => $data->dia]
             )->one();
             if ($disponibilidad != null) {
-                $disponibilidad->estado = $data->estado;
+                $disponibilidad->estado = $data->estado ? 1 : 0;
                 if ($disponibilidad->save()) return "OK";
                 else return join(", ", $disponibilidad->getFirstErrors());
             } else {
