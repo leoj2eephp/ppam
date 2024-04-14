@@ -73,6 +73,18 @@ class DisponibilidadController extends ActiveController {
         }
     }
 
+    public function actionByTurnDay() {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $postData = file_get_contents("php://input");
+        $data = json_decode($postData);
+        $disponibles = Disponibilidad::find()
+            ->joinWith(["user", "turno"])
+            ->where("turno_id = :tId AND dia = :dia", [":tId" => $data->turno_id, ":dia" => $data->dia])
+            ->all();
+
+        return $disponibles;
+    }
+
     public function actionDias() {
         Yii::$app->response->format = Response::FORMAT_JSON;
         return Dias::getIntDay("Viernes");

@@ -61,7 +61,19 @@ class Disponibilidad extends \yii\db\ActiveRecord {
                 'orden' => $model->turno->orden,
             ];
         };
-        
+        $fields['user'] = function ($model) {
+            return [
+                "id" => $model->user->id,
+                'username' => $model->user->username,
+                'email' => $model->user->email,
+                'nombre' => $model->user->nombre,
+                'apellido' => $model->user->apellido,
+                'apellido_casada' => $model->user->apellido_casada,
+                'genero' => $model->user->genero,
+                'telefono' => $model->user->telefono,
+            ];
+        };
+
         return $fields;
     }
 

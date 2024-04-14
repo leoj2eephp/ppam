@@ -2,9 +2,7 @@
 
 use app\models\Punto;
 use yii\helpers\Html;
-use yii\helpers\Url;
-use yii\grid\ActionColumn;
-use yii\grid\GridView;
+use kartik\grid\GridView;
 
 /** @var yii\web\View $this */
 /** @var app\models\PuntoSearch $searchModel */
@@ -35,10 +33,14 @@ $this->params['breadcrumbs'][] = $this->title;
                     'longitud',
                     'color',
                     [
-                        'class' => ActionColumn::class,
-                        'urlCreator' => function ($action, Punto $model, $key, $index, $column) {
-                            return Url::toRoute([$action, 'id' => $model->id]);
-                        }
+                        'class' => 'kartik\grid\ActionColumn',
+                        'template' => '{turnos} {update} {delete}',
+                        'buttons' => [
+                            'turnos' => function ($url, $model, $key) {
+                                // Puedes personalizar el botón de la nueva acción aquí
+                                return Html::a('<span class="fas fa-clock"></span>', ['punto/update-turnos', 'id' => $model->id], ["title" => "Turnos Asociados"]);
+                            },
+                        ],
                     ],
                 ],
             ]); ?>

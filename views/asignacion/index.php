@@ -10,6 +10,7 @@ use yii\helpers\Url;
     </div>
     <div class="card-body">
       <?= app\components\Alert::widget() ?>
+      <input type="hidden" id="diaSemana">
       <?php
       echo \yii2fullcalendar\yii2fullcalendar::widget(array(
         'events' => $events,
@@ -17,6 +18,7 @@ use yii\helpers\Url;
         'clientOptions' => [
           'locale' => 'es',
           "dayClick" => new \yii\web\JsExpression('function(date, jsEvent, view) {
+                        document.querySelector("#diaSemana").value = date.day()
                         // Swal.fire("Clicked on: " + date.format() + "<br />Coordinates: " + jsEvent.pageX + "," + jsEvent.pageY + "<br />Current view: " + view.name);
                         Swal.fire({
                             title: title,
@@ -33,16 +35,22 @@ use yii\helpers\Url;
                                 const turno = swalContent.querySelector(".turno").value;
                                 const usuario1 = swalContent.querySelector(".usuario1").value;
                                 const usuario2 = swalContent.querySelector(".usuario2").value;
-                                const data = { fecha: date.format(), turno: turno, usuario1: usuario1, usuario2: usuario2, punto: punto };
-                                const response = await fetch(url, {
-                                    method: "POST",
-                                    body: JSON.stringify(data)
-                                });
-                                if (!response.ok) {
-                                  //  return Swal.showValidationMessage("${JSON.stringify(await response.json())}");
-                                  return "ERROR";
+                                if (usuario1 == usuario2) {
+                                  swalContent.querySelector("#errorUsers").style.display = "block"
+                                  return false
+                                } else {
+                                  swalContent.querySelector("#errorUsers").style.display = "none"
+                                  const data = { fecha: date.format(), turno: turno, usuario1: usuario1, usuario2: usuario2, punto: punto };
+                                  const response = await fetch(url, {
+                                      method: "POST",
+                                      body: JSON.stringify(data)
+                                  });
+                                  if (!response.ok) {
+                                    //  return Swal.showValidationMessage("${JSON.stringify(await response.json())}");
+                                    return "ERROR";
+                                  }
+                                  return response.json();
                                 }
-                                return response.json();
                               } catch (error) {
                                 Swal.showValidationMessage("Request failed: ${error}");
                               }
@@ -87,7 +95,7 @@ use yii\helpers\Url;
                             }
                           });                          
                     }'),
-                    "eventClick" => new \yii\web\JsExpression('function(calEvent, jsEvent, view) {
+          "eventClick" => new \yii\web\JsExpression('function(calEvent, jsEvent, view) {
                       Swal.fire({
                         title: calEvent.title,
                         // icon: "danger",
@@ -106,7 +114,7 @@ use yii\helpers\Url;
     <div class="row">
       <div class="col-sm-6">
         <label for="punto">Seleccione Punto</label>
-        <select class="form-control form-control-lg punto">
+        <select class="form-control form-control-lg punto" id="punto">
           <option value="-1">No Seleccionado</option>
           <?php foreach ($puntos as $p) : ?>
             <option value="<?= $p->id ?>"><?= $p->nombre ?></option>
@@ -115,32 +123,28 @@ use yii\helpers\Url;
       </div>
       <div class="col-sm-6">
         <label for="turno">Seleccione Turno</label>
-        <select class="form-control form-control-lg turno">
+        <select class="form-control form-control-lg turno" id="turno">
           <option value="-1">No Seleccionado</option>
-          <?php foreach ($turnos as $t) : ?>
-            <option value="<?= $t->id ?>"><?= $t->horario ?></option>
-          <?php endforeach ?>
         </select>
       </div>
     </div>
-    <div class="row mt-3">
+    <div class="row mt-3 mb-5">
       <div class="col-sm-6">
         Participante 1
-        <select class="form-control usuario1">
+        <select class="form-control form-control-lg usuario1 usuarios">
           <option value="-1">No Seleccionado</option>
-          <?php foreach ($usuarios as $u) : ?>
-            <option value="<?= $u->id ?>"><?= $u->nombreCompleto ?></option>
-          <?php endforeach ?>
         </select>
       </div>
       <div class="col-sm-6">
         Participante 2
-        <select class="form-control usuario2">
+        <select class="form-control form-control-lg usuario2 usuarios">
           <option value="-1">No Seleccionado</option>
-          <?php foreach ($usuarios as $u) : ?>
-            <option value="<?= $u->id ?>"><?= $u->nombreCompleto ?></option>
-          <?php endforeach ?>
         </select>
+      </div>
+      <div class="col-sm-12">
+        <label id="errorUsers" style="display: none;" class="text-danger mt-2">
+          Seleccione diferentes participantes
+        </label>
       </div>
     </div>
   </form>
@@ -150,6 +154,67 @@ $script = <<< JS
     const title = "Creación de Turno";
     const crear_turno = document.querySelector("#crear_turno");
     const cuerpoDialogo = crear_turno.innerHTML;
+    
+    document.addEventListener("change", function(e) {
+      const punto = e.target.closest("#punto");
+      const turno = e.target.closest("#turno");
+      if (punto) {
+        const turno = e.target.parentElement.parentElement.querySelector("#turno")
+        var url = "/v1/turno/get-by-punto";
+        var data = { punto_id: punto.value, dia: document.querySelector("#diaSemana").value }
+
+        fetch(url, {
+          method: "POST",
+          body: JSON.stringify(data),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+        .then((res) => res.json())
+        .catch((error) => console.error("Error:", error))
+        .then((response) => {
+          turno.innerHTML = "<option value='-1'>No Seleccionado</option>"
+          response.forEach((tp, index) => {
+            const option = document.createElement("option")
+            option.textContent = tp.turno.nombre + " (" + tp.turno.desde + " - " + tp.turno.hasta + ")"
+            option.value = tp.turno.id
+            turno.appendChild(option)
+          })
+        });
+      } else if (turno) {
+        const selectUsuarios = e.target.parentNode.parentNode.parentNode.querySelectorAll(".usuarios")
+        var url = "/v1/disponibilidad/by-turn-day";
+        var data = { turno_id: turno.value, dia: document.querySelector("#diaSemana").value }
+
+        fetch(url, {
+          method: "POST",
+          body: JSON.stringify(data),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+        .then((res) => res.json())
+        .catch((error) => console.error("Error:", error))
+        .then((response) => {
+          selectUsuarios.forEach((usuario, i) => {
+            usuario.innerHTML = "<option value='-1'>No Seleccionado</option>"
+          })
+          response.forEach((tp, index) => {
+            const option = document.createElement("option")
+            if (tp.user.apellido_casada !== null && tp.user.apellido_casada !== "")
+              option.textContent = tp.user.nombre + " " + tp.user.apellido + " " + tp.user.apellido_casada
+            else
+              option.textContent = tp.user.nombre + " " + tp.user.apellido
+            option.value = tp.user.id
+            
+            selectUsuarios.forEach((usuario, i) => {
+              usuario.appendChild(option.cloneNode(true))
+            })
+          })
+        });
+      }
+    })
+
 JS;
 
 $this->registerJs($script);

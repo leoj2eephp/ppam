@@ -29,7 +29,10 @@ class TurnoPunto extends \yii\db\ActiveRecord {
         return [
             [['turno_id', 'punto_id', 'dia'], 'required'],
             [['turno_id', 'punto_id', 'dia'], 'integer'],
-            [['turno_id', 'punto_id'], 'unique', 'targetAttribute' => ['turno_id', 'punto_id']],
+            /* [['turno_id'], 'unique'],
+            [['punto_id'], 'unique'],
+            [['dia'], 'unique'], */
+            [['turno_id', 'punto_id', 'dia'], 'unique', 'targetAttribute' => ['turno_id', 'punto_id', 'dia']],
             [['punto_id'], 'exist', 'skipOnError' => true, 'targetClass' => Punto::class, 'targetAttribute' => ['punto_id' => 'id']],
             [['turno_id'], 'exist', 'skipOnError' => true, 'targetClass' => Turno::class, 'targetAttribute' => ['turno_id' => 'id']],
         ];
@@ -40,11 +43,24 @@ class TurnoPunto extends \yii\db\ActiveRecord {
      */
     public function attributeLabels() {
         return [
-            'turno_id' => 'Turno ID',
-            'punto_id' => 'Punto ID',
-            'dia' => 'Dia',
+            'turno_id' => 'Turno',
+            'punto_id' => 'Punto',
+            'dia' => 'Día',
         ];
     }
+
+    public function fields() {
+        $fields = parent::fields();
+        $fields['punto'] = function () {
+            return $this->punto;
+        };
+        $fields['turno'] = function () {
+            return $this->turno;
+        };
+
+        return $fields;
+    }
+
 
     /**
      * Gets query for [[Punto]].
@@ -61,6 +77,6 @@ class TurnoPunto extends \yii\db\ActiveRecord {
      * @return \yii\db\ActiveQuery
      */
     public function getTurno() {
-        return $this->hasOne(Turno::class, ['id' => 'turno_id']);
+        return $this->hasOne(Turno::class, ['id' => 'turno_id'])->orderBy("orden ASC");
     }
 }

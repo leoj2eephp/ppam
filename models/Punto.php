@@ -49,6 +49,29 @@ class Punto extends \yii\db\ActiveRecord {
         ];
     }
 
+    public function fields() {
+        $fields = parent::fields();
+        $fields['turnos'] = function ($model) {
+            $turnos = [];
+            foreach ($model->turnoPuntos as $turnoPunto) {
+                $turno = $turnoPunto->turno;
+                if ($turno !== null) {
+                    $turnos[] = [
+                        'id' => $turno->id,
+                        'nombre' => $turno->nombre,
+                        'desde' => $turno->desde,
+                        'hasta' => $turno->hasta,
+                        'estado' => $turno->estado,
+                        'orden' => $turno->orden,
+                    ];
+                }
+            }
+            return $turnos;
+        };
+
+        return $fields;
+    }
+
     /**
      * Gets query for [[Asignacions]].
      *

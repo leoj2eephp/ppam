@@ -2,11 +2,16 @@
 
 namespace app\controllers;
 
+use app\models\Dias;
 use app\models\Punto;
 use app\models\PuntoSearch;
+use app\models\Turno;
+use app\models\TurnoPunto;
+use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Response;
 
 /**
  * PuntoController implements the CRUD actions for Punto model.
@@ -27,6 +32,13 @@ class PuntoController extends Controller {
                 ],
             ]
         );
+    }
+
+    public function beforeAction($action) {
+        if ($action->id == "update-turnos" || $action->id == "sync-all-turns") {
+            $this->enableCsrfValidation = false;
+        }
+        return parent::beforeAction($action);
     }
 
     /**
@@ -94,6 +106,66 @@ class PuntoController extends Controller {
         return $this->render('update', [
             'model' => $model,
         ]);
+    }
+
+    public function actionUpdateTurnos($id) {
+        if ($this->request->isPost) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            $postData = file_get_contents('php://input');
+            $data = json_decode($postData);
+            $model = new TurnoPunto();
+            $model->punto_id = $data->punto_id;
+            $model->turno_id = (int) $data->turno_id;
+            $model->dia = (int) $data->dia;
+            if ($model->save()) {
+                $turno = Turno::find()->where(["id" => $model->turno_id])->one();
+                return ["data" => $turno, "status" => "OK"];
+            } else {
+                return ["data" => join(", ", $model->getFirstErrors()), "status" => "ERROR"];
+            }
+        }
+        $model = $this->findModel($id);
+        /* $turnosPunto = TurnoPunto::find()->with(["turno", "punto"])
+            ->where("punto_id = :punto_id", [":punto_id" => $id])->orderBy(["dia" => SORT_ASC])->all();*/
+        $turnosPunto = TurnoPunto::find()
+            ->join("INNER JOIN", "punto p", "p.id = turno_punto.punto_id")
+            ->join("INNER JOIN", "turno t", "t.id = turno_punto.turno_id")
+            ->where("punto_id = :punto_id", [":punto_id" => $id])
+            ->orderBy(["dia" => SORT_ASC, "t.orden" => SORT_ASC])->all();
+
+        $turnos = Turno::find()->all();
+        return $this->render('update_turnos', [
+            'model' => $model,
+            "turnos" => $turnos,
+            "turnosPunto" => $turnosPunto,
+        ]);
+    }
+
+    public function actionSyncAllTurns() {
+        if ($this->request->isPost) {
+            $puntoId = $_POST["puntoId"];
+            TurnoPunto::deleteAll(["punto_id" => $puntoId]);
+            foreach (Dias::getAll() as $dia) {
+                $turnos = Turno::find()->orderBy("orden")->all();
+                foreach ($turnos as $t) {
+                    $turnoPunto = new TurnoPunto();
+                    $turnoPunto->punto_id = $puntoId;
+                    $turnoPunto->turno_id = $t->id;
+                    $turnoPunto->dia = Dias::getIntDay($dia);
+                    $turnoPunto->save();
+                }
+            }
+            return $this->redirect(["update-turnos", "id" => $puntoId]);
+        }
+    }
+
+    public function actionDeleteTurnoPunto($pId, $tId, $dia) {
+        $turnoPunto = TurnoPunto::find()
+            ->where(
+                "punto_id = :pId AND turno_id = :tId AND dia = :dia",
+                [":pId" => $pId, ":tId" => $tId, ":dia" => $dia]
+            )->one();
+        if ($turnoPunto->delete()) return $this->redirect(["update-turnos", "id" => $pId]);
     }
 
     /**
