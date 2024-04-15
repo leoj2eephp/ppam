@@ -30,7 +30,14 @@ $this->params['breadcrumbs'][] = $this->title;
                     'nombre',
                     'latitud',
                     'longitud',
-                    'color',
+                    [
+                        'attribute' => 'color',
+                        'label' => 'Color',
+                        'format' => 'raw',
+                        'value' => function ($model) {
+                            return "<div style='height: 1.5em; width: 50px; background: ".$model->color.";'></div>";
+                        },
+                    ],
                     [
                         'class' => 'kartik\grid\ActionColumn',
                         'template' => '{turnos} {update} {delete}',
