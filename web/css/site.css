@@ -1,3 +1,12 @@
+.card-info:not(.card-outline)>.card-header {
+  background-color: #6750A4 !important;
+}
+
+.btn-success {
+  background-color: rgb(53, 179, 149) !important;
+  border-color: rgb(53, 179, 149) !important;
+}
+
 /* CHECKBOXES CON ESTILO SWITCH */
 /* The switch - the box around the slider */
 .switch {
