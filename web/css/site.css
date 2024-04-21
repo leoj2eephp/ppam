@@ -70,3 +70,13 @@
   .slider.round:before {
     border-radius: 50%;
   }
+
+/* FULL CALENDAR */
+.fc-event {
+  padding: 8px; /* Puedes ajustar este valor según tus necesidades */
+  font-size: 14px; /* Puedes ajustar este valor según tus necesidades */
+}
+
+.fc-title {
+  white-space: pre-wrap !important;
+}

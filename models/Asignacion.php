@@ -52,13 +52,13 @@ class Asignacion extends \yii\db\ActiveRecord {
         return [
             'id' => 'ID',
             'fecha' => 'Fecha',
-            'confirmado1' => 'Confirmado1',
-            'confirmado2' => 'Confirmado2',
+            'confirmado1' => 'Confirmado 1',
+            'confirmado2' => 'Confirmado 2',
             'no_realizado' => 'No Realizado',
-            'user_id1' => 'User Id1',
-            'user_id2' => 'User Id2',
-            'turno_id' => 'Turno ID',
-            'punto_id' => 'Punto ID',
+            'user_id1' => 'Voluntario 1',
+            'user_id2' => 'Voluntario 2',
+            'turno_id' => 'Turno',
+            'punto_id' => 'Punto',
         ];
     }
 

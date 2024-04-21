@@ -11,6 +11,7 @@ use yii\helpers\Url;
     <div class="card-body">
       <?= app\components\Alert::widget() ?>
       <input type="hidden" id="diaSemana">
+      <input type="hidden" id="fechaSelected">
       <?php
       echo \yii2fullcalendar\yii2fullcalendar::widget(array(
         'events' => $events,
@@ -19,6 +20,7 @@ use yii\helpers\Url;
           'locale' => 'es',
           "dayClick" => new \yii\web\JsExpression('function(date, jsEvent, view) {
                         document.querySelector("#diaSemana").value = date.day()
+                        document.querySelector("#fechaSelected").value = date.format()
                         // Swal.fire("Clicked on: " + date.format() + "<br />Coordinates: " + jsEvent.pageX + "," + jsEvent.pageY + "<br />Current view: " + view.name);
                         Swal.fire({
                             title: title,
@@ -61,15 +63,7 @@ use yii\helpers\Url;
                               if (result.value !== "ERROR") {
                                 const asignacion = result.value;
                                 const calendar = $("#calendar").fullCalendar("getCalendar");
-                                const newEvent = {
-                                  id: asignacion.id,
-                                  title: asignacion.punto.nombre + " " + asignacion.turno.nombre,
-                                  start: asignacion.fecha + " " + asignacion.turno.desde,
-                                  end: asignacion.fecha + " " + asignacion.turno.hasta,
-                                  color: asignacion.punto.color,
-                                };
-                                calendar.renderEvent(newEvent);
-                                
+
                                 const casada1 = asignacion.user1.apellido_casada ?? "";
                                 const casada2 = asignacion.user2.apellido_casada ?? "";
                                 const nombreCompleto1 = casada1 !== "" ?
@@ -78,6 +72,16 @@ use yii\helpers\Url;
                                 const nombreCompleto2 = casada2 !== "" ?
                                   asignacion.user2.nombre + " " + asignacion.user2.apellido + " de " + casada2 : 
                                   asignacion.user2.nombre + " " + asignacion.user2.apellido;
+
+                                const newEvent = {
+                                  id: asignacion.id,
+                                  title: asignacion.punto.nombre + " " + asignacion.turno.nombre + "\n - " + nombreCompleto1 + "\n - " + nombreCompleto2,
+                                  start: asignacion.fecha + " " + asignacion.turno.desde,
+                                  end: asignacion.fecha + " " + asignacion.turno.hasta,
+                                  color: asignacion.punto.color,
+                                };
+                                calendar.renderEvent(newEvent);
+                                
                                 Swal.fire({
                                   title: "Turno creado exitosamente!",
                                   icon: "success",
@@ -96,12 +100,9 @@ use yii\helpers\Url;
                           });                          
                     }'),
           "eventClick" => new \yii\web\JsExpression('function(calEvent, jsEvent, view) {
-                      Swal.fire({
-                        title: calEvent.title,
-                        // icon: "danger",
-                        text: "Coordinates: " + jsEvent.pageX + "," + jsEvent.pageY + ". " + "View: " + view.name
-                      });
-                    }'),
+            // console.log(calEvent.customAttribute)
+            // text: "Coordinates: " + jsEvent.pageX + "," + jsEvent.pageY + ". " + "View: " + view.name
+          }'),
         ],
       ));
       ?>
@@ -151,17 +152,18 @@ use yii\helpers\Url;
 </div>
 <?php
 $script = <<< JS
-    const title = "Creación de Turno";
-    const crear_turno = document.querySelector("#crear_turno");
-    const cuerpoDialogo = crear_turno.innerHTML;
+    const title = "Creación de Turno"
+    const crear_turno = document.querySelector("#crear_turno")
+    const cuerpoDialogo = crear_turno.innerHTML
     
     document.addEventListener("change", function(e) {
-      const punto = e.target.closest("#punto");
-      const turno = e.target.closest("#turno");
+      const punto = e.target.closest("#punto")
+      const turno = e.target.closest("#turno")
+      const fechaSelected = document.querySelector("#fechaSelected").value
       if (punto) {
         const turno = e.target.parentElement.parentElement.querySelector("#turno")
         var url = "/v1/turno/get-by-punto";
-        var data = { punto_id: punto.value, dia: document.querySelector("#diaSemana").value }
+        var data = { punto_id: punto.value, dia: document.querySelector("#diaSemana").value, fecha: fechaSelected }
 
         fetch(url, {
           method: "POST",

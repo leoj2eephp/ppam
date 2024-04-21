@@ -139,11 +139,12 @@ class EventJS extends Model {
      *
      */
     public $nonstandard;
+    public $customAttribute;
 
     public function rules() {
         return [
             [['id', 'resourceId'], 'integer'],
-            ['title, allDay, start, end, url, description, className, source, color, backgroundColor, borderColor, textColor, nonstandard', 'safe'],
+            ['title, allDay, start, end, url, description, className, source, color, backgroundColor, borderColor, textColor, nonstandard, customAttribute', 'safe'],
             ['editable, startEditable, durationEditable', 'boolean'],
         ];
     }

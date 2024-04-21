@@ -2,6 +2,7 @@
 
 namespace app\modules\v1\controllers;
 
+use app\models\Asignacion;
 use app\models\Turno;
 use app\models\TurnoPunto;
 use Yii;
@@ -32,7 +33,20 @@ class TurnoController extends ActiveController {
             ->addOrderBy(["dia" => SORT_ASC, "turno.orden" => SORT_ASC])
             ->all();
 
-        return $turnosPunto;
+        $asignaciones = Asignacion::find()
+            ->where("fecha = :fecha AND
+             punto_id = :punto_id", [":fecha" => $data->fecha, ":punto_id" => $data->punto_id])->all();
+        $turnosPuntoDisponibles = [];
+
+        $turnosIds = array_column($asignaciones, 'turno_id');
+        foreach ($turnosPunto as $ua) {
+            $found_key = array_search($ua->turno_id, $turnosIds);
+            if (gettype($found_key) == "boolean") {
+                $turnosPuntoDisponibles[] = $ua->toArray();
+            }
+        }
+        
+        return $turnosPuntoDisponibles;
     }
 
     public function behaviors() {
