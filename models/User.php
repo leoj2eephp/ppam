@@ -31,6 +31,7 @@ use yii\web\IdentityInterface;
  * @property string|null $verification_token
  * @property string|null $access_token
  * @property string|null $device_token
+ * @property string|null $condicion_especial
  *
  * @property Asignacion[] $asignacions
  * @property Asignacion[] $asignacions0
@@ -63,7 +64,7 @@ class User extends ActiveRecord implements IdentityInterface {
         return [
             [['username', 'auth_key', 'password_hash', 'nombre', 'apellido', 'genero', 'telefono', 'email', 'created_at', 'updated_at',], 'required'],
             [['genero', 'status', 'created_at', 'updated_at'], 'integer'],
-            [['ultima_sesion'], 'safe'],
+        [['ultima_sesion', 'condicion_especial'], 'safe'],
             [['username', 'password_hash', 'password_reset_token', 'email', 'verification_token', 'access_token', 'device_token'], 'string', 'max' => 255],
             [['auth_key'], 'string', 'max' => 32],
             [['nombre', 'apellido', 'apellido_casada'], 'string', 'max' => 45],

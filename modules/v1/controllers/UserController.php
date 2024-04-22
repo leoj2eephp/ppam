@@ -50,6 +50,15 @@ class UserController extends ActiveController {
         return $user->save();
     }
 
+    public function actionUpdateCondicion() {
+        $postData = file_get_contents("php://input");
+        $data = json_decode($postData);
+
+        $user = User::findOne($data->id);
+        $user->condicion_especial = $data->condicion;
+        return $user->save();
+    }
+
     public function behaviors() {
         $behaviors = parent::behaviors();
         $behaviors['verbs'] = [
