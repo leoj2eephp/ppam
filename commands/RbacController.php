@@ -1,6 +1,7 @@
 <?php
 namespace app\commands;
 
+use app\models\User;
 use Yii;
 use yii\console\Controller;
 
@@ -51,7 +52,24 @@ class RbacController extends Controller {
         $auth->addChild($usuario, $manageAsignaciones); */
 
         // Asignar roles a usuarios (1, 2, 3 son IDs de usuarios)
-        $auth->assign($admin, 1);
+        /* $auth->assign($admin, 1);
+        $auth->assign($supervisor, 2);
+        $auth->assign($usuario, 3); */
+        // Crear un usuario admin
+        $user = new User();
+        $user->username = 'admin';
+        $user->email = 'admin@example.com';
+        $user->setPassword('admin1234');
+        $user->generateAuthKey();
+        if ($user->save()) {
+            echo "Admin user created successfully.\n";
+        } else {
+            echo "Failed to create admin user.\n";
+            return;
+        }
+
+        // Asignar roles a usuarios (1, 2, 3 son IDs de usuarios)
+        $auth->assign($admin, $user->id);
         $auth->assign($supervisor, 2);
         $auth->assign($usuario, 3);
     }
