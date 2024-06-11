@@ -92,7 +92,7 @@ use yii\helpers\Url;
                               } else {
                                 Swal.fire({
                                   title: "Error al crear el turno!",
-                                  icon: "danger",
+                                  icon: "error",
                                   text: result.value
                                 });
                               }

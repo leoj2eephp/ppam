@@ -73,6 +73,7 @@ class UserController extends BaseRbacController {
             }
         } else {
             $model->loadDefaultValues();
+            $model->rol = "usuario";
         }
 
         return $this->render('create', [
@@ -89,8 +90,14 @@ class UserController extends BaseRbacController {
      */
     public function actionUpdate($id) {
         $model = $this->findModel($id);
+        $auth = Yii::$app->authManager;
+        $roles = $auth->getRolesByUser($model->id);
+        $roleNames = array_keys($roles);
+        $model->rol = $roles[$roleNames[0]]->name;
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
+        if ($this->request->isPost && $model->load($this->request->post())) {
+            $model->updateRol();
+            $model->save();
             return $this->redirect(["index"]);
         }
 

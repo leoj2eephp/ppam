@@ -7,14 +7,13 @@ use app\models\Disponibilidad;
 use app\models\DisponibilidadSearch;
 use app\models\Turno;
 use app\models\User;
-use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
  * DisponibilidadController implements the CRUD actions for Disponibilidad model.
  */
-class DisponibilidadController extends Controller {
+class DisponibilidadController extends BaseRbacController {
     /**
      * @inheritDoc
      */

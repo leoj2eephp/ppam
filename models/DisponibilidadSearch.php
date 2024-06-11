@@ -10,12 +10,15 @@ use app\models\Disponibilidad;
  * DisponibilidadSearch represents the model behind the search form of `app\models\Disponibilidad`.
  */
 class DisponibilidadSearch extends Disponibilidad {
+
+    public $nombreCompleto;
     /**
      * {@inheritdoc}
      */
     public function rules() {
         return [
             [['id', 'turno_id', 'user_id', 'dia'], 'integer'],
+            [["nombreCompleto"], "safe"]
         ];
     }
 
@@ -36,8 +39,7 @@ class DisponibilidadSearch extends Disponibilidad {
      */
     public function search($params) {
         $query = Disponibilidad::find();
-
-        // add conditions that should always apply here
+        $query->joinWith(["user"]);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -46,8 +48,6 @@ class DisponibilidadSearch extends Disponibilidad {
         $this->load($params);
 
         if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
             return $dataProvider;
         }
 
@@ -59,6 +59,9 @@ class DisponibilidadSearch extends Disponibilidad {
             'dia' => $this->dia,
         ]);
 
+        // Condición personalizada basada en el modelo relacionado
+        $query->andFilterWhere(['like', 'user.nombre', $this->nombreCompleto]);
+        $query->orFilterWhere(['like', 'user.apellido', $this->nombreCompleto]);
         return $dataProvider;
     }
 }

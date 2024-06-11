@@ -1,5 +1,6 @@
 <?php
 
+use app\models\Dias;
 use app\models\Disponibilidad;
 use yii\helpers\Html;
 use yii\helpers\Url;
@@ -26,11 +27,19 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filterModel' => $searchModel,
                 'columns' => [
                     ['class' => 'yii\grid\SerialColumn'],
-
-                    'id',
-                    'turno_id',
-                    'user_id',
-                    'dia',
+                    'turno.nombre',
+                    [
+                        'attribute' => 'nombreCompleto',
+                        'value' => "user.nombreCompleto",
+                    ],
+                    [
+                        'attribute' => 'dia',
+                        'label' => 'Día',
+                        'format' => 'raw',
+                        'value' => function ($model) {
+                            return Dias::getDayName($model->dia);
+                        },
+                    ],
                     [
                         'class' => ActionColumn::class,
                         'urlCreator' => function ($action, Disponibilidad $model, $key, $index, $column) {

@@ -40,6 +40,7 @@ class User extends ActiveRecord implements IdentityInterface {
     const STATUS_DELETED = 0;
     const STATUS_INACTIVE = 9;
     const STATUS_ACTIVE = 10;
+    public $rol;
 
     /**
      * {@inheritdoc}
@@ -64,7 +65,7 @@ class User extends ActiveRecord implements IdentityInterface {
         return [
             [['username', 'auth_key', 'password_hash', 'nombre', 'apellido', 'genero', 'telefono', 'email', 'created_at', 'updated_at',], 'required'],
             [['genero', 'status', 'created_at', 'updated_at'], 'integer'],
-        [['ultima_sesion', 'condicion_especial'], 'safe'],
+            [['ultima_sesion', 'condicion_especial', 'rol'], 'safe'],
             [['username', 'password_hash', 'password_reset_token', 'email', 'verification_token', 'access_token', 'device_token'], 'string', 'max' => 255],
             [['auth_key'], 'string', 'max' => 32],
             [['nombre', 'apellido', 'apellido_casada'], 'string', 'max' => 45],
@@ -99,6 +100,7 @@ class User extends ActiveRecord implements IdentityInterface {
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'verification_token' => 'Verification Token',
+            'rol' => 'Rol',
         ];
     }
 
@@ -288,7 +290,8 @@ class User extends ActiveRecord implements IdentityInterface {
             $this->updated_at = time();
             if ($this->save()) {
                 if ($this->save()) {
-                    // $this->asignarRolesPermisos();
+                    $auth = Yii::$app->authManager;
+                    $auth->assign($auth->getRole('usuario'), $this->id);
                     // Crear todas las disponibilidades
                     $this->asignarDisponibilidad();
                     // Enviar correo y hacer los pasos respectivos para finalizar la creación del usuario
@@ -335,5 +338,12 @@ class User extends ActiveRecord implements IdentityInterface {
 
     public function getNombreCompleto() {
         return $this->nombre . " " . $this->apellido;
+    }
+
+    public function updateRol() {
+        $auth = Yii::$app->authManager;
+        $auth->revokeAll($this->id);
+        $role = $auth->getRole($this->rol);
+        $auth->assign($role, $this->id);
     }
 }

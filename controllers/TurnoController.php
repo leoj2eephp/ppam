@@ -13,7 +13,7 @@ use yii\filters\VerbFilter;
 /**
  * TurnoController implements the CRUD actions for Turno model.
  */
-class TurnoController extends Controller {
+class TurnoController extends BaseRbacController {
     /**
      * @inheritDoc
      */

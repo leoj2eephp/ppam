@@ -14,7 +14,6 @@ class BaseRbacController extends Controller {
      * @inheritdoc
      */
     public function beforeAction($action) {
-        return true;
         // your custom code here, if you want the code to run before action filters,
         // which are triggered on the [[EVENT_BEFORE_ACTION]] event, e.g. PageCache or AccessControl
 

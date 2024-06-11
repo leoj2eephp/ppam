@@ -112,4 +112,11 @@ class AuthItem extends \yii\db\ActiveRecord {
     public function getRuleName() {
         return $this->hasOne(AuthRule::class, ['name' => 'rule_name']);
     }
+
+    public static function getRoles() {
+        $roles = AuthItem::find()
+            ->where(['type' => 1])
+            ->all();
+        return $roles;
+    }
 }

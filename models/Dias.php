@@ -17,4 +17,8 @@ class Dias {
     public static function getIntDay($dia) {
         return array_search($dia, self::getAll());
     }
+
+    public static function getDayName($dia) {
+        return self::getAll()[$dia];
+    }
 }

@@ -3,9 +3,7 @@
 namespace app\modules\v1\controllers;
 
 use app\models\Asignacion;
-use app\models\User;
 use Yii;
-use yii\data\ActiveDataProvider;
 use yii\filters\VerbFilter;
 use yii\rest\ActiveController;
 use yii\web\Response;

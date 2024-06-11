@@ -16,7 +16,7 @@ use yii\web\Response;
 /**
  * PuntoController implements the CRUD actions for Punto model.
  */
-class PuntoController extends Controller {
+class PuntoController extends BaseRbacController {
     /**
      * @inheritDoc
      */

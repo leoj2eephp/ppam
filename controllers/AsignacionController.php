@@ -19,7 +19,7 @@ use yii\helpers\Url;
 /**
  * AsignacionController implements the CRUD actions for Asignacion model.
  */
-class AsignacionController extends Controller {
+class AsignacionController extends BaseRbacController {
     /**
      * @inheritDoc
      */
