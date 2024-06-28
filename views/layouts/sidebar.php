@@ -17,7 +17,9 @@
                     ['label' => 'Turnos', 'url' => ['turno/index'], 'icon' => 'clock', 'visible' => Yii::$app->user->can("turno/index")],
                     ['label' => 'Usuarios', 'url' => ['user/index'], 'icon' => 'user', 'visible' => Yii::$app->user->can("user/index")],
                     ['label' => 'Disponibilidad', 'url' => ['disponibilidad/update', "id" => Yii::$app->user->id], 'icon' => 'check',
-                        'visible' => Yii::$app->user->can("disponibilidad/update")],
+                        'visible' => Yii::$app->user->can("disponibilidad/update") && !Yii::$app->user->can("admin")],
+                    ['label' => 'Encargados', 'url' => ['user/encargados'], 'icon' => 'info',
+                        'visible' => Yii::$app->user->can("user/encargados") || Yii::$app->user->can("admin")],
                     // ['label' => 'Informational', 'iconStyle' => 'far', 'iconClassAdded' => 'text-info'],
                 ],
             ]);

@@ -291,7 +291,7 @@ class User extends ActiveRecord implements IdentityInterface {
             if ($this->save()) {
                 if ($this->save()) {
                     $auth = Yii::$app->authManager;
-                    $auth->assign($auth->getRole('usuario'), $this->id);
+                    $auth->assign($auth->getRole($this->rol), $this->id);
                     // Crear todas las disponibilidades
                     $this->asignarDisponibilidad();
                     // Enviar correo y hacer los pasos respectivos para finalizar la creación del usuario

@@ -1,3 +1,19 @@
+.card {
+  border-radius: 10px !important;
+  transition: transform .2s ease;
+}
+
+.card:hover {
+  transform: scale(1.01);
+}
+
+.card-header {
+  background-color: #6750A4;
+  color: white;
+  border-top-left-radius: 10px !important;
+  border-top-right-radius: 10px !important;
+}
+
 .card-info:not(.card-outline)>.card-header {
   background-color: #6750A4 !important;
 }
@@ -10,6 +26,20 @@
 .alert-success {
   background-color: rgb(53, 179, 149) !important;
   border-color: rgb(53, 179, 149) !important;
+}
+
+.edit-icon {
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  transform: translateY(-50%);
+  color: white;
+  transition: transform .2s ease;
+  zoom: 1.2;
+}
+
+.edit-icon:hover {
+  transform: scale(1.2) translateY(-40%);
 }
 
 /* CHECKBOXES CON ESTILO SWITCH */

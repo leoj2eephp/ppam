@@ -2,12 +2,14 @@
 
 namespace app\controllers;
 
+use app\models\TurnoPunto;
 use app\models\User;
 use app\models\UserSearch;
 use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Response;
 
 /**
  * UserController implements the CRUD actions for User model.
@@ -117,6 +119,43 @@ class UserController extends BaseRbacController {
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+
+    public function actionEncargados() {
+        $model = TurnoPunto::find()->with(['user'])->groupBy("dia")
+            ->orderBy(['turno_punto.dia' => SORT_ASC])->all();
+        $encargados = User::find()
+            ->innerJoin('auth_assignment', 'auth_assignment.user_id = user.id')
+            ->where(['auth_assignment.item_name' => "supervisor"])
+            ->all();
+
+        return $this->render("encargados", ["model" => $model, "encargados" => $encargados]);
+    }
+
+    public function actionUpdateEncargadoDia() {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $postData = file_get_contents('php://input');
+        $data = json_decode($postData);
+        try {
+            if (isset($data->dia) && isset($data->encargado)) {
+                $resultado = TurnoPunto::updateAll(
+                    ['user_id' => $data->encargado],
+                    'dia = :dia',
+                    [':dia' => $data->dia]
+                );
+
+                if ($resultado > 0) {
+                    $user = $this->findModel($data->encargado);
+                    return ['status' => 'ok', 'message' => 'Encargado actualizado correctamente', "user" => $user];
+                } else {
+                    return ['status' => 'error', 'message' => 'No se encontraron registros para actualizar'];
+                }
+            } else {
+                return ['status' => 'error', 'message' => 'Datos incompletos'];
+            }
+        } catch (\Exception $e) {
+            return ['status' => 'error', 'message' => 'Error: ' . $e->getMessage()];
+        }
     }
 
     /**
