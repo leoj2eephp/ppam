@@ -1,7 +1,12 @@
+<?php
+
+use yii\helpers\Url;
+?>
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="index3.html" class="brand-link">
-        <img src="<?= $assetDir ?>/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+    <a href="<?= Url::to("/site/index") ?>" class="brand-link">
+        <img src="<?= Yii::getAlias('@web') . '/images/logo.png' ?>" 
+            alt="PPAM" class="brand-image img-circle elevation-3" style="opacity: .8">
         <span class="brand-text font-weight-light">PPAM Osorno</span>
     </a>
 
@@ -16,10 +21,17 @@
                     ['label' => 'Puntos', 'url' => ['punto/index'], 'icon' => 'map-pin', 'visible' => Yii::$app->user->can("punto/index")],
                     ['label' => 'Turnos', 'url' => ['turno/index'], 'icon' => 'clock', 'visible' => Yii::$app->user->can("turno/index")],
                     ['label' => 'Usuarios', 'url' => ['user/index'], 'icon' => 'user', 'visible' => Yii::$app->user->can("user/index")],
-                    ['label' => 'Disponibilidad', 'url' => ['disponibilidad/update', "id" => Yii::$app->user->id], 'icon' => 'check',
-                        'visible' => Yii::$app->user->can("disponibilidad/update") && !Yii::$app->user->can("admin")],
-                    ['label' => 'Encargados', 'url' => ['user/encargados'], 'icon' => 'info',
-                        'visible' => Yii::$app->user->can("user/encargados") || Yii::$app->user->can("admin")],
+                    [
+                        'label' => 'Disponibilidad', 'url' => ['disponibilidad/update', "id" => Yii::$app->user->id], 'icon' => 'check',
+                        'visible' => Yii::$app->user->can("disponibilidad/update") && !Yii::$app->user->can("admin")
+                    ],
+                    [
+                        'label' => 'Encargados', 'url' => ['user/encargados'], 'icon' => 'info',
+                        'visible' => Yii::$app->user->can("user/encargados") || Yii::$app->user->can("admin")
+                    ], [
+                        'label' => 'Noticias', 'url' => ['noticia/index'], 'icon' => 'newspaper',
+                        'visible' => Yii::$app->user->can("noticia/index") || Yii::$app->user->can("admin")
+                    ],
                     // ['label' => 'Informational', 'iconStyle' => 'far', 'iconClassAdded' => 'text-info'],
                 ],
             ]);

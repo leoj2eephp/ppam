@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\LoginForm;
+use app\models\Noticia;
 use Yii;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
@@ -58,7 +59,8 @@ class SiteController extends Controller {
      * @return string
      */
     public function actionIndex() {
-        return $this->render('index');
+        $noticias = Noticia::find()->where("estado = 1")->orderBy("fecha DESC")->all();
+        return $this->render('index', ["noticias" => $noticias]);
     }
 
     /**

@@ -8,7 +8,7 @@ use app\models\User;
     <input type="hidden" id="csrf-token" value="<?= Yii::$app->request->getCsrfToken() ?>">
     <?php foreach ($model as $dato) : ?>
         <div class="col-md-3 mb-4">
-            <div class="card">
+            <div class="card card-animada">
                 <div class="card-header">
                     <?= Dias::getDayName($dato->dia) ?>
                     <span class="text-white edit-icon" data-id="<?= $dato->dia ?>">
