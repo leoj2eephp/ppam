@@ -15,6 +15,8 @@ use yii\helpers\Url;
             <?php
             echo \hail812\adminlte\widgets\Menu::widget([
                 'items' => [
+                    ['label' => 'Inicio', 'header' => true],
+                    ['label' => 'Inicio', 'url' => ['site/index'], 'icon' => 'home', 'visible' => !Yii::$app->user->isGuest],
                     ['label' => 'Administración', 'header' => true],
                     ['label' => 'Login', 'url' => ['site/login'], 'icon' => 'sign-in-alt', 'visible' => Yii::$app->user->isGuest],
                     ['label' => 'Asignaciones', 'url' => ['asignacion/index'], 'icon' => 'calendar', 'visible' => Yii::$app->user->can("asignacion/index")],

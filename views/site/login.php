@@ -3,7 +3,11 @@
 use yii\helpers\Html;
 ?>
 <div class="row justify-content-center">
-    <div class="card col-md-6">
+    <div class="card col-md-6" style="padding: 0; border-radius: 10px !important;">
+        <div class="card-header-login text-center">
+            <img src="<?= Yii::getAlias("@web") . "/images/logo.png" ?>" alt="Logo" class="img-fluid"
+                style="max-height: 150px;">
+        </div>
         <div class="card-body login-card-body">
             <p class="login-box-msg">Para comenzar, inicie sesión</p>
 
@@ -27,8 +31,8 @@ use yii\helpers\Html;
                 ->label(false)
                 ->passwordInput(['placeholder' => $model->getAttributeLabel('password')]) ?>
 
-            <div class="row flex">
-                <div class="col-4">
+            <div class="row">
+                <div class="col-12">
                     <?= Html::submitButton('Iniciar Sesión', ['class' => 'btn btn-primary btn-block']) ?>
                 </div>
             </div>

@@ -103,11 +103,11 @@ $script = <<< JS
             var data = { punto_id: puntoId, turno_id: turno.value, dia: dia.value };
 
             fetch(url, {
-            method: "POST",
-            body: JSON.stringify(data),
-            headers: {
-                "Content-Type": "application/json",
-            },
+                method: "POST",
+                body: JSON.stringify(data),
+                headers: {
+                    "Content-Type": "application/json",
+                },
             })
             .then((res) => res.json())
             .catch((error) => console.error("Error:", error))

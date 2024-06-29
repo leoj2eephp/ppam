@@ -7,6 +7,7 @@ use app\models\Disponibilidad;
 use app\models\DisponibilidadSearch;
 use app\models\Turno;
 use app\models\User;
+use Yii;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
@@ -86,11 +87,11 @@ class DisponibilidadController extends BaseRbacController {
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id) {
-        $user = User::find()->where(["id" => $id])->one();
+    public function actionUpdate() {
+        $user = User::find()->where(["id" => Yii::$app->user->id])->one();
         $user->limitInfo();
         $model = Disponibilidad::find()->joinWith(["user", "turno"])
-            ->where("user_id = :userId AND disponibilidad.estado = 1", [":userId" => $id])
+            ->where("user_id = :userId AND disponibilidad.estado = 1", [":userId" => $user->id])
             ->addOrderBy(["turno.orden" => SORT_ASC])
             ->all();
             

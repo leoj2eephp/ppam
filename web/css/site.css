@@ -1,10 +1,19 @@
+/* COLORES SOBRESCRITOS */
+.btn-primary {
+  background-color: #543EF3 !important;
+}
+
+.bg-primary {
+  background-color: #543EF3 !important;
+}
+
 .card {
   border-radius: 10px !important;
-  transition: transform .2s ease;
+  transition: transform .5s;
 }
 
 .card-animada:hover {
-  transform: scale(1.01);
+  transform: scale(1.02);
 }
 
 .card-header {
@@ -21,7 +30,6 @@
 .card-body-info {
   flex: 1 1 auto;
   min-height: 100px;
-  cursor: pointer;
 }
 
 .card-body-info .info-content .card-title {
@@ -55,6 +63,12 @@
   text-overflow: ellipsis;
 }
 
+.card-header-login {
+  background-color: #543EF3;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
 .btn-success {
   background-color: rgb(53, 179, 149) !important;
   border-color: rgb(53, 179, 149) !important;
@@ -71,12 +85,30 @@
   right: 15px;
   transform: translateY(-50%);
   color: white;
-  transition: transform .2s ease;
+  transition: transform .5s ease;
   zoom: 1.2;
 }
 
 .edit-icon:hover {
   transform: scale(1.2) translateY(-40%);
+}
+
+.link {
+  cursor: pointer;
+  transition: transform .5s ease;
+}
+
+.link:hover {
+  transform: scale(1.4) translateX(20%);
+}
+
+span.estado {
+  cursor: pointer;
+  transition: transform .5s ease;
+}
+
+span.estado:hover {
+  transform: scale(1.4) translateX(20%);
 }
 
 /* CHECKBOXES CON ESTILO SWITCH */

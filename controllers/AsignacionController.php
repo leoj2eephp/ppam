@@ -10,11 +10,12 @@ use app\models\Disponibilidad;
 use app\models\Punto;
 use app\models\Turno;
 use app\models\User;
+use Exception;
 use Yii;
-use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\Url;
+use yii\web\Response;
 
 /**
  * AsignacionController implements the CRUD actions for Asignacion model.
@@ -31,7 +32,7 @@ class AsignacionController extends BaseRbacController {
                     'class' => VerbFilter::class,
                     'actions' => [
                         'delete' => ['POST'],
-                        // 'crear-turno' => ['POST'],
+                        'confirm-reject' => ['POST'],
                     ],
                 ],
             ]
@@ -56,7 +57,7 @@ class AsignacionController extends BaseRbacController {
 
         // CARGAR TURNOS
         $asignaciones = Asignacion::find()
-            ->where("fecha BETWEEN (SELECT ADDDATE( ADDDATE( LAST_DAY(NOW()), 1), INTERVAL -1 MONTH)) AND ADDDATE( LAST_DAY(NOW()), 1)")
+            ->where("fecha BETWEEN CURDATE() - INTERVAL 30 DAY AND CURDATE() + INTERVAL 30 DAY;")
             ->all();
         $events = array();
         foreach ($asignaciones as $a) {
@@ -64,9 +65,9 @@ class AsignacionController extends BaseRbacController {
             $e->id = $a->id;
             $e->title = $a->punto->nombre . ' ' . $a->turno->nombre . '
  - ' .
-            $a->user1->nombreCompleto . '
+                $a->user1->nombreCompleto . '
  - ' .
-            $a->user2->nombreCompleto;
+                $a->user2->nombreCompleto;
             $e->start = $a->fecha . " " . $a->turno->desde;
             $e->end = $a->fecha . " " . $a->turno->hasta;
             $e->color = $a->punto->color;
@@ -192,6 +193,39 @@ class AsignacionController extends BaseRbacController {
             "usuariosND" => $json,
         ]);
     }
+
+    public function actionConfirmReject() {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        try {
+            $data = json_decode(file_get_contents('php://input'));
+            if (!isset($data->id) || !isset($data->confirm)) {
+                return ['success' => false, 'message' => 'Datos insuficientes'];
+            }
+
+            $join = $data->confirm == 1 ? "user1" : "user2";
+            $asignacion = Asignacion::find()->with($join)->where(['id' => $data->id])->one();
+            if (isset($asignacion)) {
+                if (($join == "user1" && $asignacion->user1->id !== Yii::$app->user->id) ||
+                    ($join == "user2" && $asignacion->user2->id !== Yii::$app->user->id))
+                return ['success' => false, 'message' => 'No autorizado o asignación no encontrada'];
+            }
+
+            if (isset($data->confirm)) {
+                if ($data->confirm == 1) $asignacion->confirmado1 = $data->estado;
+                if ($data->confirm == 2) $asignacion->confirmado2 = $data->estado;
+            } else {
+                return ['success' => false, 'message' => 'Datos de confirmación inválidos'];
+            }
+            $participacion = $data->estado == 1 ? "Participación confirmada" : "Participación rechazada";
+            return $asignacion->save()
+                ? ['success' => true, 'message' => $participacion]
+                : ['success' => false, 'message' => 'No se pudo guardar la asignación'];
+        } catch (Exception $e) {
+            Yii::error("Error en actionConfirmReject: " . $e->getMessage(), __METHOD__);
+            return ['success' => false, 'message' => 'Ocurrió un error. ' .  $e->getMessage()];
+        }
+    }
+
 
     /**
      * Deletes an existing Asignacion model.

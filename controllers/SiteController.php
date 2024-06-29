@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Asignacion;
 use app\models\LoginForm;
 use app\models\Noticia;
 use Yii;
@@ -60,7 +61,9 @@ class SiteController extends Controller {
      */
     public function actionIndex() {
         $noticias = Noticia::find()->where("estado = 1")->orderBy("fecha DESC")->all();
-        return $this->render('index', ["noticias" => $noticias]);
+        $asignaciones = Asignacion::find()->where("(user_id1 = :id OR user_id2 = :id) and fecha >= now()",
+            [":id" => Yii::$app->user->id])->all();
+        return $this->render('index', ["noticias" => $noticias, "asignaciones" => $asignaciones]);
     }
 
     /**
