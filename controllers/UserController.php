@@ -122,15 +122,20 @@ class UserController extends BaseRbacController {
     }
 
     public function actionEncargados() {
-        $model = TurnoPunto::find()->with(['user'])->groupBy("dia")
-            ->orderBy(['turno_punto.dia' => SORT_ASC])->all();
+        $model = TurnoPunto::find()
+            ->select(['dia', 'MIN(turno_id) as turno_id', 'MIN(punto_id) as punto_id', 'MIN(user_id) as user_id'])
+            ->with(['user'])
+            ->groupBy('dia')
+            ->orderBy(['dia' => SORT_ASC])
+            ->all();
+    
         $encargados = User::find()
             ->innerJoin('auth_assignment', 'auth_assignment.user_id = user.id')
             ->where(['auth_assignment.item_name' => "supervisor"])
             ->all();
-
+    
         return $this->render("encargados", ["model" => $model, "encargados" => $encargados]);
-    }
+    }    
 
     public function actionUpdateEncargadoDia() {
         Yii::$app->response->format = Response::FORMAT_JSON;
