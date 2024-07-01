@@ -9,6 +9,7 @@ use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Response;
 
 /**
  * NoticiaController implements the CRUD actions for Noticia model.
@@ -97,6 +98,24 @@ class NoticiaController extends BaseRbacController {
         return $this->render('update', [
             'model' => $model,
         ]);
+    }
+
+    public function actionUpdateEstado() {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $postData = file_get_contents('php://input');
+        try {
+            $data = json_decode($postData);
+            if (isset($data)) {
+                $noticia = $this->findModel($data->id);
+                $noticia->estado = $data->estado;
+                return $noticia->save()
+                    ? ['success' => true, 'message' => "OK"]
+                    : ['success' => false, 'message' => 'No se pudo guardar la asignación'];
+            }
+        } catch (Exception $e) {
+            Yii::error("Error en actionConfirmReject: " . $e->getMessage(), __METHOD__);
+            return ['success' => false, 'message' => 'Ocurrió un error. ' .  $e->getMessage()];
+        }
     }
 
     /**

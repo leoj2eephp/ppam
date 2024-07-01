@@ -31,8 +31,23 @@ $this->params['breadcrumbs'][] = $this->title;
                 'columns' => [
                     ['class' => 'yii\grid\SerialColumn'],
                     // 'id',
-                    'titulo',
-                    'contenido:ntext',
+                    [
+                        "attribute" => "titulo",
+                        "label" => "Título",
+                        'format' => 'html',
+                        'headerOptions' => ['class' => 'lg-column-width'],
+                        'contentOptions' => ['class' => 'lg-column-width'],
+                    ],
+                    [
+                        "attribute" => "contenido",
+                        "label" => "Contenido",
+                        'format' => 'html',
+                        'headerOptions' => ['class' => 'xxl-column-width'],
+                        'contentOptions' => ['class' => 'xxl-column-width'],
+                        'content' => function ($model) {
+                            return '<div class="truncated-text">' . \yii\helpers\Html::encode($model->contenido) . '</div>';
+                        },
+                    ],
                     [
                         "attribute" => "fecha",
                         "label" => "Fecha",
@@ -44,23 +59,53 @@ $this->params['breadcrumbs'][] = $this->title;
                         'attribute' => 'estado',
                         'label' => 'Estado',
                         'format' => 'raw',
+                        'headerOptions' => ['class' => 'sm-column-width'],
+                        'contentOptions' => ['class' => 'sm-column-width'],
                         'value' => function ($model) {
-                            return $model->estado ? "Visible" : "No Visible";
+                            $switch = '<label class="switch">';
+                            $isChecked = $model->estado ? "checked" : "";
+                            $checkbox = "<input type='checkbox' " . $isChecked . "/><span class='slider round'></span>";
+                            $switch .= $checkbox . "</label>";
+                            return $switch;
                         },
                     ],
                     //'user_id',
                     [
                         'class' => 'kartik\grid\ActionColumn',
                         'template' => '{update} {delete}',
-                        'buttons' => [
-                            /* 'turnos' => function ($url, $model, $key) {
-                                // Puedes personalizar el botón de la nueva acción aquí
-                                return Html::a('<span class="fas fa-clock"></span>', ['punto/update-turnos', 'id' => $model->id], ["title" => "Turnos Asociados"]);
-                            }, */
-                        ],
                     ],
                 ],
             ]); ?>
         </div>
     </div>
 </div>
+<?php
+$script = <<< JS
+    $(document).ready(function() {
+        $("[type=checkbox]").on("click", function() {
+            const [turnoId, dia] = $(this).attr("id").split("_");
+            const checkSwitch = $(this);
+            var jsondata = {
+                id: id,
+                estado: $(this).is(":checked"),
+            };
+            $.ajax({
+                url: "update-estado",
+                type: "post",
+                data: { json: JSON.stringify(jsondata) },
+                success: function(data) {
+                    if (data !== "OK") {
+                        const estado = $(checkSwitch).is(":checked");
+                        $(checkSwitch).prop('checked', !estado);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    const estado = $(checkSwitch).is(":checked");
+                    $(checkSwitch).prop('checked', !estado);
+                }
+            });
+        });
+    });
+JS;
+$this->registerJs($script);
+?>

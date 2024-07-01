@@ -111,6 +111,44 @@ span.estado:hover {
   transform: scale(1.4) translateX(20%);
 }
 
+.sm-column-width {
+  width: 5%;
+  word-wrap: break-word;
+  white-space: normal;
+}
+
+.md-column-width {
+  width: 10%;
+  word-wrap: break-word;
+  white-space: normal;
+}
+
+.lg-column-width {
+  width: 20%;
+  word-wrap: break-word;
+  white-space: normal;
+}
+
+.xl-column-width {
+  max-width: 30%;
+  word-wrap: break-word;
+  white-space: normal;
+}
+
+.xxl-column-width {
+  max-width: 40%;
+  word-wrap: break-word;
+  white-space: normal;
+}
+
+.truncated-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 /* CHECKBOXES CON ESTILO SWITCH */
 /* The switch - the box around the slider */
 .switch {

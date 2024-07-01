@@ -184,7 +184,6 @@ class AsignacionController extends BaseRbacController {
             throw new \Exception('Error encoding data: ' . json_last_error_msg());
         }
 
-
         return $this->render('update', [
             "model" => $model,
             "turnos" => $turnos,
