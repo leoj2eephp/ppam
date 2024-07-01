@@ -21,7 +21,8 @@ use app\components\Helper;
                             <p class="card-text">
                                 <?= $noti->contenido ?>
                             </p>
-                            <a href="#">Leer más...</a>
+                            <!-- <a href="#" onclick='mostrarNoticia("<?= $noti->titulo ?>", <?= json_encode($noti->contenido) ?>)'>Leer más...</a> -->
+                            <a href="#" onclick='mostrarNoticia(<?= json_encode($noti->titulo) ?>, <?= json_encode(nl2br($noti->contenido)) ?>)'>Leer más...</a>
                         </div>
                     </div>
                 </div>
@@ -123,7 +124,6 @@ use app\components\Helper;
 </div>
 <?php
 $script = <<< JS
-
     const estados = document.querySelectorAll('.estado');
 
     estados.forEach(function (estadoElement) {
@@ -245,6 +245,19 @@ $script = <<< JS
         element.innerHTML = newText + " <i class='fas fa-edit link '"+ newClass +"'></i>";
     }
 
+    function mostrarNoticia(titulo, contenido) {
+        Swal.fire({
+            title: titulo,
+            html: contenido,
+            icon: 'info',
+            confirmButtonText: 'Cerrar',
+            customClass: {
+                popup: 'custom-swal-popup',
+                title: 'custom-swal-title',
+                htmlContainer: 'custom-swal-html'
+            }
+        });
+    }
 JS;
-$this->registerJs($script);
+$this->registerJs($script, \yii\web\View::POS_END);
 ?>

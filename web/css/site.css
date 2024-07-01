@@ -111,6 +111,22 @@ span.estado:hover {
   transform: scale(1.4) translateX(20%);
 }
 
+.custom-swal-popup {
+  width: 70%;
+  max-width: 100%;
+}
+.custom-swal-title {
+  text-align: center;
+}
+.custom-swal-html {
+  text-align: justify;
+}
+@media (max-width: 768px) {
+  .custom-swal-popup {
+      width: 90%;
+  }
+}
+
 .sm-column-width {
   width: 5%;
   word-wrap: break-word;
