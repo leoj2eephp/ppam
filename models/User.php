@@ -3,6 +3,7 @@
 namespace app\models;
 
 use app\components\Helper;
+use app\components\Mailer;
 use Exception;
 use Yii;
 use yii\base\NotSupportedException;
@@ -281,8 +282,19 @@ class User extends ActiveRecord implements IdentityInterface {
     public function createUser() {
         $transaction = \Yii::$app->db->beginTransaction();
         try {
-            $this->username = strtolower(Helper::remove_accents($this->nombre)) . '.' . strtolower($this->apellido);
-            $this->setPassword($this->nombre . "1234");
+            $primerCaracter = strtolower(Helper::remove_accents(substr($this->nombre, 0, 1)));
+            $usernameBase = $primerCaracter . strtolower(Helper::remove_accents($this->apellido));
+            $existingUser = User::find()->where(['username' => $usernameBase])->one();
+            $counter = 2;
+            // Mientras exista un usuario con el mismo username, agregar un número al final
+            while ($existingUser !== null) {
+                $usernameBase = $usernameBase . $counter;
+                $existingUser = User::find()->where(['username' => $existingUser])->one();
+                $counter++;
+            }
+
+            $this->username = $usernameBase;
+            $this->setPassword(strtolower(Helper::remove_accents($this->apellido)) . "1234");
             $this->generateAuthKey();
             $this->generateEmailVerificationToken();
             $this->status = User::STATUS_ACTIVE;
@@ -295,7 +307,9 @@ class User extends ActiveRecord implements IdentityInterface {
                     // Crear todas las disponibilidades
                     $this->asignarDisponibilidad();
                     // Enviar correo y hacer los pasos respectivos para finalizar la creación del usuario
+                    Mailer::send($this->email, "Usuario creado en PPAM", "/mail/newUserCreated", ["model" => $this]);
                     \Yii::$app->session->setFlash("success", "Usuario creado exitosamente!");
+                    \Yii::$app->session->setFlash("success", "Se envió correo de notificación");
                     $transaction->commit();
                 } else {
                     throw new Exception(join(", ", $this->getFirstErrors()));

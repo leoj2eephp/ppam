@@ -8,4 +8,5 @@ return [
     'user.passwordResetTokenExpire' => 3600,
     'bsVersion' => '5.x',
     'bsDependencyEnabled' => false,
+    'siteUrl' => "https://ppamosorno.org"
 ];
