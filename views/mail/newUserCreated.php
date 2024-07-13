@@ -8,7 +8,6 @@ $siteUrl = Yii::$app->params['siteUrl'];
 ?>
 <p>Estimado hermano:</p>
 <p>Se ha creado una cuenta para usted en ppamosorno.org. Sus datos son los siguientes:</p>
-3
 <table>
     <tr>
         <td>Nombre de Usuario:</td>
