@@ -18,10 +18,12 @@
         "yiisoft/yii2": "~2.0.45",
         "yiisoft/yii2-bootstrap5": "~2.0.2",
         "yiisoft/yii2-symfonymailer": "~2.0.3",
+        "vlucas/phpdotenv": "^5.4",
         "hail812/yii2-adminlte3": "~1.1",
         "kartik-v/yii2-editable": "dev-master",
         "philippfrenzel/yii2fullcalendar": "3.6.7",
-        "google/apiclient": "2.15.0"
+        "google/apiclient": "2.15.0",
+        "phpmailer/phpmailer": "^6.9"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

@@ -5,9 +5,13 @@ namespace app\controllers;
 use app\models\Asignacion;
 use app\models\LoginForm;
 use app\models\Noticia;
+use app\models\PasswordResetRequestForm;
+use app\models\ResetPasswordForm;
+use InvalidArgumentException;
 use Yii;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\web\Response;
 
@@ -24,7 +28,7 @@ class SiteController extends Controller {
                 'class' => AccessControl::class,
                 'rules' => [
                     [
-                        'actions' => ['login', 'error'],
+                        'actions' => ['login', 'error', 'request-password-reset', 'reset-password'],
                         'allow' => true,
                     ],
                     [
@@ -61,8 +65,10 @@ class SiteController extends Controller {
      */
     public function actionIndex() {
         $noticias = Noticia::find()->where("estado = 1")->orderBy("fecha DESC")->all();
-        $asignaciones = Asignacion::find()->where("(user_id1 = :id OR user_id2 = :id) and fecha >= now()",
-            [":id" => Yii::$app->user->id])->all();
+        $asignaciones = Asignacion::find()->where(
+            "(user_id1 = :id OR user_id2 = :id) and fecha >= now()",
+            [":id" => Yii::$app->user->id]
+        )->all();
         return $this->render('index', ["noticias" => $noticias, "asignaciones" => $asignaciones]);
     }
 
@@ -89,6 +95,42 @@ class SiteController extends Controller {
             'model' => $model,
         ]);
     }
+
+    public function actionRequestPasswordReset() {
+        $model = new PasswordResetRequestForm();
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $result = $model->sendEmail();
+            if ($result) {
+                Yii::$app->session->setFlash('success', 'Email enviado con instrucciones para restablecer contraseña.');
+                return $this->goHome();
+            } else {
+                Yii::$app->session->setFlash('error', 'No se pudo enviar el correo electrónico.');
+            }
+        }
+    
+        return $this->render('passwordReset', [
+            'model' => $model,
+        ]);
+    }    
+
+    public function actionResetPassword($token) {
+        try {
+            $model = new ResetPasswordForm($token);
+        } catch (InvalidArgumentException $e) {
+            throw new BadRequestHttpException($e->getMessage());
+        }
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()) {
+            Yii::$app->session->setFlash('success', 'New password was saved.');
+
+            return $this->goHome();
+        }
+
+        return $this->render('updatePassword', [
+            'model' => $model,
+        ]);
+    }
+
 
     /**
      * Logout action.

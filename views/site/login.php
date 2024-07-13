@@ -2,11 +2,11 @@
 
 use yii\helpers\Html;
 ?>
+<?= app\components\Alert::widget() ?>
 <div class="row justify-content-center">
     <div class="card col-md-6" style="padding: 0; border-radius: 10px !important;">
         <div class="card-header-login text-center">
-            <img src="<?= Yii::getAlias("@web") . "/images/logo.png" ?>" alt="Logo" class="img-fluid"
-                style="max-height: 150px;">
+            <img src="<?= Yii::getAlias("@web") . "/images/logo.png" ?>" alt="Logo" class="img-fluid" style="max-height: 150px;">
         </div>
         <div class="card-body login-card-body">
             <p class="login-box-msg">Para comenzar, inicie sesión</p>
@@ -38,7 +38,13 @@ use yii\helpers\Html;
             </div>
 
             <?php \yii\bootstrap4\ActiveForm::end(); ?>
+
+            <!-- Enlace de Recuperación de Contraseña -->
+            <div class="text-center">
+                <p>
+                    <?= Html::a('¿Olvidaste tu contraseña?', ['site/request-password-reset']) ?>
+                </p>
+            </div>
         </div>
-        <!-- /.login-card-body -->
     </div>
 </div>
