@@ -37,4 +37,5 @@ tests/_support/_generated
 .vscode/launch.json
 config/db_local.php
 config/web_local.php
+web/index.php
 .env
