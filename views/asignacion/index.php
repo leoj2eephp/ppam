@@ -151,6 +151,7 @@ use yii\helpers\Url;
   </form>
 </div>
 <meta name="base-url" content="<?= Url::to(['/v1/turno/get-by-punto']) ?>">
+<meta name="base-url-turn" content="<?= Url::to(['/v1/turno/by-turn-day']) ?>">
 <?php
 $script = <<< JS
     const title = "Creación de Turno"
@@ -187,6 +188,7 @@ $script = <<< JS
         });
       } else if (turno) {
         const selectUsuarios = e.target.parentNode.parentNode.parentNode.querySelectorAll(".usuarios")
+        const url = document.querySelector('meta[name="base-url-turn"]').getAttribute('content');
         var url = "/v1/disponibilidad/by-turn-day";
         var data = { turno_id: turno.value, dia: document.querySelector("#diaSemana").value }
 
