@@ -224,8 +224,7 @@ class AsignacionController extends BaseRbacController {
             return ['success' => false, 'message' => 'Ocurrió un error. ' .  $e->getMessage()];
         }
     }
-
-
+    
     /**
      * Deletes an existing Asignacion model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
