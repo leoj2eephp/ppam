@@ -79,10 +79,11 @@ $this->params['breadcrumbs'][] = 'Actualizar';
         </tbody>
     </table>
 </div>
+<meta name="base-url" content="<?= Url::to(['/punto/update-turnos']) ?>">
 <?php
 $script = <<< JS
     // Genera la URL en PHP y almacénala en una variable JavaScript
-    const baseUrl = "<?= Url::to(['/punto/update-turnos']) ?>";
+    const baseUrl = document.querySelector('meta[name="base-url"]').getAttribute('content');
     const puntoId = "<?= $model->id ?>";
     const asociarTurno = document.querySelector("#asociarTurno");
     const turno = document.querySelector("#turno");
