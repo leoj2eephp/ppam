@@ -87,7 +87,6 @@ $script = <<< JS
     const asociarTurno = document.querySelector("#asociarTurno");
     const turno = document.querySelector("#turno");
     const dia = document.querySelector("#dia");
-    const puntoId = $model->id;
     const tabla = document.querySelector("#table-turno-puntos");
     asociarTurno.addEventListener("click", function(e) {
         if (puntoId != -1 && turno.value != -1) {
