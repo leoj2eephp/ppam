@@ -111,7 +111,6 @@ $script = <<< JS
                 body: JSON.stringify(data),
                 headers: {
                     "Content-Type": "application/json",
-                    // "X-CSRF-Token": "<?= Yii::$app->request->getCsrfToken() ?>"
                 },
             })
             .then((res) => res.json())
