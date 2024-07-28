@@ -189,7 +189,7 @@ $script = <<< JS
       } else if (turno) {
         const selectUsuarios = e.target.parentNode.parentNode.parentNode.querySelectorAll(".usuarios")
         const url = document.querySelector('meta[name="base-url-turn"]').getAttribute('content');
-        var url = "/v1/disponibilidad/by-turn-day";
+        // var url = "/v1/disponibilidad/by-turn-day";
         var data = { turno_id: turno.value, dia: document.querySelector("#diaSemana").value }
 
         fetch(url, {
