@@ -151,7 +151,7 @@ use yii\helpers\Url;
   </form>
 </div>
 <meta name="base-url" content="<?= Url::to(['/v1/turno/get-by-punto']) ?>">
-<meta name="base-url-turn" content="<?= Url::to(['/v1/turno/by-turn-day']) ?>">
+<meta name="base-url-turn" content="<?= Url::to(['/v1/disponibilidad/by-turn-day']) ?>">
 <?php
 $script = <<< JS
     const title = "Creación de Turno"
