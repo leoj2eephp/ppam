@@ -45,7 +45,7 @@ $this->params['breadcrumbs'][] = 'Actualizar';
         <div class="card-footer">
             <form action="<?= Url::to(['/punto/sync-all-turns']) ?>" method="post">
                 <button type="button" class="btn btn-success" id="asociarTurno">Asociar Turno <i class="fa fa-plus-circle"></i></button>
-                <button class="btn bg-purple" id="asociarTurno">Asociar Todos los horarios <i class="fa fa-sync"></i></button>
+                <button class="btn bg-purple" id="asociarTodosTurnos">Asociar Todos los horarios <i class="fa fa-sync"></i></button>
                 <input type="hidden" name="_csrf" value="<?= Yii::$app->request->getCsrfToken() ?>">
                 <input type="hidden" name="puntoId" value="<?= $model->id ?>">
             </form>
