@@ -307,7 +307,7 @@ class User extends ActiveRecord implements IdentityInterface {
                     // Crear todas las disponibilidades
                     $this->asignarDisponibilidad();
                     // Enviar correo y hacer los pasos respectivos para finalizar la creación del usuario
-                    Mailer::send($this->email, "Usuario creado en PPAM", "/mail/newUserCreated", ["model" => $this]);
+                    // Mailer::send($this->email, "Usuario creado en PPAM", "/mail/newUserCreated", ["model" => $this]);
                     \Yii::$app->session->setFlash("success", "Usuario creado exitosamente!");
                     \Yii::$app->session->setFlash("success", "Se envió correo de notificación");
                     $transaction->commit();
