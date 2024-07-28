@@ -14,6 +14,10 @@ $siteUrl = Yii::$app->params['siteUrl'];
         <td><?= Html::encode($model->username) ?></td>
     </tr>
     <tr>
+        <td>Contraseña:</td>
+        <td><?= Html::encode($model->apellido . '1234') ?></td>
+    </tr>
+    <tr>
         <td>Correo electrónico:</td>
         <td><?= Html::encode($model->email) ?></td>
     </tr>
