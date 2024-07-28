@@ -103,7 +103,7 @@ $script = <<< JS
             });
 
             // var url = "/punto/update-turnos?id=" + $model->id;
-            const url = `${baseUrl}?id=${puntoId}`;
+            const url = baseUrl + "?id=" + puntoId;
             var data = { punto_id: puntoId, turno_id: turno.value, dia: dia.value };
 
             fetch(url, {
