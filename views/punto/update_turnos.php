@@ -81,6 +81,9 @@ $this->params['breadcrumbs'][] = 'Actualizar';
 </div>
 <?php
 $script = <<< JS
+    // Genera la URL en PHP y almacénala en una variable JavaScript
+    const baseUrl = "<?= Url::to(['/punto/update-turnos']) ?>";
+    const puntoId = "<?= $model->id ?>";
     const asociarTurno = document.querySelector("#asociarTurno");
     const turno = document.querySelector("#turno");
     const dia = document.querySelector("#dia");
@@ -99,11 +102,8 @@ $script = <<< JS
                 }
             });
 
-            var baseUrl = "<?= Url::to(['/punto/sync-all-turns']) ?>";
-            var puntoId = "<?= $model->id ?>";
-
-            // Concatenamos la URL con el ID del punto
-            var url = baseUrl + "?punto_id=" + puntoId;
+            // var url = "/punto/update-turnos?id=" + $model->id;
+            const url = `${baseUrl}?id=${puntoId}`;
             var data = { punto_id: puntoId, turno_id: turno.value, dia: dia.value };
 
             fetch(url, {
@@ -111,6 +111,7 @@ $script = <<< JS
                 body: JSON.stringify(data),
                 headers: {
                     "Content-Type": "application/json",
+                    "X-CSRF-Token": "<?= Yii::$app->request->getCsrfToken() ?>"
                 },
             })
             .then((res) => res.json())
