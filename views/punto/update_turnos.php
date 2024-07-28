@@ -86,7 +86,7 @@ $script = <<< JS
     // Genera la URL en PHP y almacénala en una variable JavaScript
     const baseUrl = document.querySelector('meta[name="base-url"]').getAttribute('content');
     var puntoId = document.querySelector("#punto_id");
-    puntoId = parseInt(puntoId);
+    puntoId = Number(puntoId);
     const asociarTurno = document.querySelector("#asociarTurno");
     const turno = document.querySelector("#turno");
     const dia = document.querySelector("#dia");
