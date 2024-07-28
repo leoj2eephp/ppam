@@ -50,7 +50,7 @@ $this->params['breadcrumbs'][] = 'Actualizar';
                 <input type="hidden" name="puntoId" value="<?= $model->id ?>">
             </form>
         </div>
-        <input type="hidden" name="punto_id" value="<?= $model->id ?>">
+        <input type="hidden" id="punto_id" value="<?= $model->id ?>">
     </div>
 
     <table class="table table-striped" id="table-turno-puntos">
