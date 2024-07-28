@@ -99,8 +99,10 @@ $script = <<< JS
                 }
             });
 
-            var url = "<?= Url::to(['/punto/sync-all-turns']) ?>"
-            url += $model->id;
+            var baseUrl = "<?= Url::to(['/punto/sync-all-turns']) ?>";
+            var puntoId = "<?= $model->id ?>";
+            // Concatenamos la URL con el ID del punto
+            var url = baseUrl + "/" + puntoId;
             var data = { punto_id: puntoId, turno_id: turno.value, dia: dia.value };
 
             fetch(url, {
