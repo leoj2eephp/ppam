@@ -153,8 +153,6 @@ use yii\helpers\Url;
 <meta name="base-url" content="<?= Url::to(['/v1/turno/get-by-punto']) ?>">
 <?php
 $script = <<< JS
-    // Genera la URL en PHP y almacénala en una variable JavaScript
-    const url = document.querySelector('meta[name="base-url"]').getAttribute('content');
     const title = "Creación de Turno"
     const crear_turno = document.querySelector("#crear_turno")
     const cuerpoDialogo = crear_turno.innerHTML
@@ -164,8 +162,9 @@ $script = <<< JS
       const turno = e.target.closest("#turno")
       const fechaSelected = document.querySelector("#fechaSelected").value
       if (punto) {
+        // Genera la URL en PHP y almacénala en una variable JavaScript
+        const url = document.querySelector('meta[name="base-url"]').getAttribute('content');
         const turno = e.target.parentElement.parentElement.querySelector("#turno")
-        // var url = "<?= Url::to(['/v1/turno/get-by-punto']) ?>"
         var data = { punto_id: punto.value, dia: document.querySelector("#diaSemana").value, fecha: fechaSelected }
 
         fetch(url, {
