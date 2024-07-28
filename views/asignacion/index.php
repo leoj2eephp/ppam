@@ -162,7 +162,7 @@ $script = <<< JS
       const fechaSelected = document.querySelector("#fechaSelected").value
       if (punto) {
         const turno = e.target.parentElement.parentElement.querySelector("#turno")
-        var url = "/v1/turno/get-by-punto";
+        var url = "<?= Url::to(['/v1/turno/get-by-punto']) ?>"
         var data = { punto_id: punto.value, dia: document.querySelector("#diaSemana").value, fecha: fechaSelected }
 
         fetch(url, {

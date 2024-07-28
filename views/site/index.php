@@ -193,7 +193,7 @@ $script = <<< JS
     });
 
     function fetchData(data, estadoElement) {
-        const url = "/asignacion/confirm-reject"
+        var url = "<?= Url::to(['/asignacion/confirm-reject']) ?>"
         console.log(data)
         fetch(url, {
             method: "post",

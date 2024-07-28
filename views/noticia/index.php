@@ -90,7 +90,7 @@ $script = <<< JS
                 estado: $(this).is(":checked"),
             };
             $.ajax({
-                url: "update-estado",
+                url: "<?= Url::to(['update-estado']) ?>",
                 type: "post",
                 data: { json: JSON.stringify(jsondata) },
                 success: function(data) {

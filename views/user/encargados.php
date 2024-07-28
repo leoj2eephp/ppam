@@ -51,7 +51,7 @@ $script = <<< JS
             });
 
             if (datos) {
-                const url = "/user/update-encargado-dia";
+                var url = "<?= Url::to(['/user/update-encargado-dia']) ?>"
                 try {
                     const response = await fetch(url, {
                         method: 'POST',

@@ -43,7 +43,7 @@ $this->params['breadcrumbs'][] = 'Actualizar';
             </div>
         </div>
         <div class="card-footer">
-            <form action="/punto/sync-all-turns" method="post">
+            <form action="<?= Url::to(['/punto/sync-all-turns']) ?>" method="post">
                 <button type="button" class="btn btn-success" id="asociarTurno">Asociar Turno <i class="fa fa-plus-circle"></i></button>
                 <button class="btn bg-purple" id="asociarTurno">Asociar Todos los horarios <i class="fa fa-sync"></i></button>
                 <input type="hidden" name="_csrf" value="<?= Yii::$app->request->getCsrfToken() ?>">
@@ -99,7 +99,8 @@ $script = <<< JS
                 }
             });
 
-            var url = "/punto/update-turnos?id=" + $model->id;
+            var url = "<?= Url::to(['/punto/sync-all-turns']) ?>"
+            url += $model->id;
             var data = { punto_id: puntoId, turno_id: turno.value, dia: dia.value };
 
             fetch(url, {
