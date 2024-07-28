@@ -72,7 +72,7 @@ class User extends ActiveRecord implements IdentityInterface {
             [['nombre', 'apellido', 'apellido_casada'], 'string', 'max' => 45],
             [['telefono'], 'string', 'max' => 15],
             [['username'], 'unique'],
-            [['email'], 'unique'],
+            // [['email'], 'unique'],
             [['password_reset_token'], 'unique'],
             ['status', 'default', 'value' => self::STATUS_INACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],
