@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\widgets\ActiveForm;
 
 ?>
 <!-- Navbar -->
@@ -13,10 +14,23 @@ use yii\helpers\Html;
     </ul>
     <ul class="navbar-nav ml-auto">
         <li class="nav-item">
-            <a class="nav-link" data-widget="logout" href="/site/logout" role="button">
-                Cerrar Sesión <i class="fas fa-sign-out-alt"></i>
-            </a>
+            <?php
+            $form = ActiveForm::begin([
+                'id' => 'logout-form',
+                'action' => ['site/logout'],
+                'method' => 'post',
+            ]);
+
+            if (!Yii::$app->user->isGuest) {
+                echo Html::submitButton(
+                    'Cerrar Sesión <i class="fas fa-sign-out-alt"></i>',
+                    ['class' => 'btn btn-link logout']
+                );
+            }
+            ActiveForm::end();
+            ?>
         </li>
     </ul>
+
 </nav>
 <!-- /.navbar -->
