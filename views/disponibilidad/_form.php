@@ -48,7 +48,7 @@ $script = <<< JS
                 dia: dia,
             };
             $.ajax({
-                url: "<?= Url::to(['update-turno-dia']) ?>",
+                url: <?= json_encode(Url::to(['update-turno-dia'])) ?>,
                 type: "post",
                 data: { json: JSON.stringify(jsondata) },
                 success: function(data) {
