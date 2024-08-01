@@ -19,7 +19,7 @@ use yii\helpers\Url;
         'clientOptions' => [
           'locale' => 'es',
           "dayClick" => new \yii\web\JsExpression('function(date, jsEvent, view) {
-                        document.querySelector("#diaSemana").value = date.day()
+                        document.querySelector("#diaSemana").value = date.day() == 0 ? 7 : date.day()
                         document.querySelector("#fechaSelected").value = date.format()
                         // Swal.fire("Clicked on: " + date.format() + "<br />Coordinates: " + jsEvent.pageX + "," + jsEvent.pageY + "<br />Current view: " + view.name);
                         Swal.fire({
