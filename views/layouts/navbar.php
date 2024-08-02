@@ -14,6 +14,7 @@ use yii\widgets\ActiveForm;
     </ul>
     <ul class="navbar-nav ml-auto">
         <?php
+        if (!Yii::$app->user->isGuest) {
             $user = Yii::$app->user->identity;
             $bienvenido = "Bienvenid";
             if ($user->genero == 1) {
@@ -21,8 +22,9 @@ use yii\widgets\ActiveForm;
             } else {
                 $bienvenido .= "a " . $user->nombreCompleto;
             }
+            echo "<h3>$bienvenido</h3>";
+        }
         ?>
-        <h3><?= $bienvenido ?></h3>
     </ul>
     <ul class="navbar-nav ml-auto">
         <li class="nav-item">
