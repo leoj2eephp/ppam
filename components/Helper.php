@@ -235,7 +235,7 @@ class Helper {
         return substr($rut[0], 0, $largo - 6) . "." . substr($rut[0], $largo - 6, 3) . "." . substr($rut[0], $largo - 3, 3) . "-" . $rut[1];
     }
     
-    function getAccessToken() {
+    private static function getAccessToken() {
         try {
             $client = new Google\Client();
             $dirPath = getenv('GOOGLE_APPLICATION_CREDENTIALS');
