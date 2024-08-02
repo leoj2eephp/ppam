@@ -79,8 +79,10 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 </div>
+<meta name="update-estado-url" content="<?= Url::to(['update-estado']) ?>">
 <?php
 $script = <<< JS
+    const updateEstadoUrl = $('meta[name="update-estado-url"]').attr("content");
     $(document).ready(function() {
         $("[type=checkbox]").on("click", function() {
             const [turnoId, dia] = $(this).attr("id").split("_");
@@ -90,7 +92,7 @@ $script = <<< JS
                 estado: $(this).is(":checked"),
             };
             $.ajax({
-                url: "<?= Url::to(['update-estado']) ?>",
+                url: updateEstadoUrl,
                 type: "post",
                 data: { json: JSON.stringify(jsondata) },
                 success: function(data) {

@@ -4,6 +4,7 @@
 
 use app\components\Helper;
 use app\models\Dias;
+use yii\helpers\Url;
 
 /** @var app\models\Disponibilidad $model */
 /** @var yii\widgets\ActiveForm $form */
@@ -35,8 +36,10 @@ Disponibilidad
         <?php } ?>
     </tbody>
 </table>
+<meta name="update-turno-dia-url" content="<?= Url::to(['update-turno-dia']) ?>">
 <?php
 $script = <<< JS
+    const updateTurnoDiaUrl = $('meta[name="update-turno-dia-url"]').attr("content");
     $(document).ready(function() {
         $("[type=checkbox]").on("click", function() {
             const [turnoId, dia] = $(this).attr("id").split("_");
@@ -48,7 +51,7 @@ $script = <<< JS
                 dia: dia,
             };
             $.ajax({
-                url: <?= json_encode(Url::to(['update-turno-dia'])) ?>,
+                url: updateTurnoDiaUrl,
                 type: "post",
                 data: { json: JSON.stringify(jsondata) },
                 success: function(data) {
