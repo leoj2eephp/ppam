@@ -35,7 +35,7 @@ use yii\helpers\Url;
                         'visible' => Yii::$app->user->can("user/index") || Yii::$app->user->can("admin")
                     ],
                     [
-                        'label' => 'Disponibilidad', 'url' => ['disponibilidad/update', "id" => Yii::$app->user->id], 'icon' => 'check',
+                        'label' => 'Mi Disponibilidad', 'url' => ['disponibilidad/update', "id" => Yii::$app->user->id], 'icon' => 'check',
                         'visible' => Yii::$app->user->can("disponibilidad/update") && !Yii::$app->user->can("admin")
                     ],
                     [

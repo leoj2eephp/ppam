@@ -88,7 +88,14 @@ class DisponibilidadController extends BaseRbacController {
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionUpdate() {
-        $user = User::find()->where(["id" => Yii::$app->user->id])->one();
+        $user = null;
+        // Si está loggeado como admin o supervisor debe modificar la información de otros usuarios
+        if (Yii::$app->authManager->checkAccess(Yii::$app->user->id, "supervisor") ||
+                Yii::$app->authManager->checkAccess(Yii::$app->user->id, "admin")) {
+            $user = User::find()->where(["id" => $_GET["id"]])->one();
+        } else {
+            $user = User::find()->where(["id" => Yii::$app->user->id])->one();
+        }
         $user->limitInfo();
         $model = Disponibilidad::find()->joinWith(["user", "turno"])
             ->where("user_id = :userId AND disponibilidad.estado = 1", [":userId" => $user->id])

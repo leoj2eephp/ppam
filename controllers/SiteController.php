@@ -7,6 +7,7 @@ use app\models\LoginForm;
 use app\models\Noticia;
 use app\models\PasswordResetRequestForm;
 use app\models\ResetPasswordForm;
+use app\models\User;
 use InvalidArgumentException;
 use Yii;
 use yii\filters\VerbFilter;
@@ -69,6 +70,9 @@ class SiteController extends Controller {
             "(user_id1 = :id OR user_id2 = :id) and fecha >= now()",
             [":id" => Yii::$app->user->id]
         )->all();
+        $user = User::find(["id" => Yii::$app->user->id])->one();
+        $user->ultima_sesion = date('Y-m-d');
+        $user->save();
         return $this->render('index', ["noticias" => $noticias, "asignaciones" => $asignaciones]);
     }
 
@@ -81,16 +85,12 @@ class SiteController extends Controller {
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
-
         // $this->layout = 'blank';
-
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             return $this->goBack();
         }
-
         $model->password = '';
-
         return $this->render('login', [
             'model' => $model,
         ]);

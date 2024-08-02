@@ -10,6 +10,11 @@ use kartik\grid\GridView;
 
 $this->title = 'Usuarios';
 $this->params['breadcrumbs'][] = $this->title;
+// Si está loggeado como supervisor modificar las posibles acciones
+$acciones_permitidas = '{disponibilidad} {update} {delete}';
+if (Yii::$app->authManager->checkAccess(Yii::$app->user->id, "supervisor")) {
+    $acciones_permitidas = '{disponibilidad} {delete}';
+}
 ?>
 <div class="user-index">
 
@@ -35,16 +40,20 @@ $this->params['breadcrumbs'][] = $this->title;
                     'nombre',
                     'apellido',
                     'apellido_casada',
-                    [
+                    /* [
                         'attribute' => 'genero',
                         'label' => 'Género',
                         'value' => function($model) {
                             return $model->genero == 1 ? "Masculino" : "Femenino";
                         }
-                    ],
+                    ], */
                     'telefono',
                     'email:email',
-                    // 'ultima_sesion:datetime',
+                    [
+                        'attribute' => 'ultima_sesion',
+                        'format' => ['date', 'php:d/m/Y'],
+                        'label' => 'Última Sesión',
+                    ],
                     [
                         'attribute' => 'status',
                         'label' => 'Estado',
@@ -65,11 +74,12 @@ $this->params['breadcrumbs'][] = $this->title;
                     // 'created_at:date',
                     [
                         'class' => 'kartik\grid\ActionColumn',
-                        'template' => '{disponibilidad} {update} {delete}',
+                        'template' => $acciones_permitidas,
                         'buttons' => [
                             'disponibilidad' => function ($url, $model, $key) {
                                 if ($model->username !== "admin") {
-                                    return Html::a('<span class="fas fa-calendar"></span>', ['disponibilidad/update', 'id' => $model->id], ["title" => "Cambiar Disponibilidad"]);
+                                    return Html::a('<span class="fas fa-calendar"></span>', 
+                                        ['disponibilidad/update', 'id' => $model->id], ["title" => "Cambiar Disponibilidad"]);
                                 }
                             },
                         ],

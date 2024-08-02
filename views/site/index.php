@@ -1,6 +1,7 @@
 <?php
 
 use app\components\Helper;
+use yii\helpers\Url;
 
 // $this->title = 'PPAM Osorno';
 ?>
@@ -122,8 +123,10 @@ use app\components\Helper;
         ?>
     </div>
 </div>
+<meta name="base-url" content="<?= Url::to(['/asignacion/confirm-reject']) ?>">
 <?php
 $script = <<< JS
+    const urlConfirmReject = document.querySelector('meta[name="base-url"]').getAttribute('content');
     const estados = document.querySelectorAll('.estado');
 
     estados.forEach(function (estadoElement) {
@@ -193,9 +196,7 @@ $script = <<< JS
     });
 
     function fetchData(data, estadoElement) {
-        var url = "<?= Url::to(['/asignacion/confirm-reject']) ?>"
-        console.log(data)
-        fetch(url, {
+        fetch(urlConfirmReject, {
             method: "post",
             headers: { 
                 'Content-Type': 'application/json',

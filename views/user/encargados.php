@@ -2,6 +2,7 @@
 
 use app\models\Dias;
 use app\models\User;
+use yii\helpers\Url;
 
 ?>
 <div class="row">
@@ -28,8 +29,10 @@ use app\models\User;
         <?php endforeach; ?>
     </select>
 </div>
+<meta name="base-url" content="<?= Url::to(['/user/update-encargado-dia']) ?>">
 <?php
 $script = <<< JS
+    const urlUpdateEncargado = document.querySelector('meta[name="base-url"]').getAttribute('content');
     const encargados = document.querySelector(".encargados")
     document.querySelectorAll('.edit-icon').forEach(icon => {
         icon.addEventListener('click', async (event) => {
@@ -51,9 +54,8 @@ $script = <<< JS
             });
 
             if (datos) {
-                var url = "<?= Url::to(['/user/update-encargado-dia']) ?>"
                 try {
-                    const response = await fetch(url, {
+                    const response = await fetch(urlUpdateEncargado, {
                         method: 'POST',
                         headers: { 
                             'Content-Type': 'application/json',
