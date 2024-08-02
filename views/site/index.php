@@ -154,11 +154,11 @@ $script = <<< JS
                     config.icon = 'info';
                     config.showDenyButton = true;
                     config.confirmButtonColor = '#28a745';
-                    config.cancelButtonColor = '#dc3545';
-                    config.denyButtonColor = 'gray';
                     config.confirmButtonText = 'Aceptar';
-                    config.cancelButtonText = 'Rechazar';
-                    config.denyButtonText = "Cancelar";
+                    config.denyButtonColor = '#dc3545';
+                    config.denyButtonText = "Rechazar";
+                    config.cancelButtonColor = 'gray';
+                    config.cancelButtonText = 'Cancelar';
                     break;
                 case 'confirmado':
                     config.title = 'Confirmado';
@@ -166,31 +166,37 @@ $script = <<< JS
                     config.icon = 'info';
                     config.showConfirmButton = false;
                     config.showDenyButton = true;
-                    config.confirmButtonColor = '#28a745';
-                    config.cancelButtonColor = '#dc3545';
-                    config.denyButtonColor = 'gray';
-                    config.confirmButtonText = 'Aceptar';
-                    config.cancelButtonText = 'Rechazar';
-                    config.denyButtonText = "Cancelar";
+                    config.showCancelButton = true;
+                    config.denyButtonColor = '#dc3545';
+                    config.denyButtonText = "Rechazar";
+                    config.cancelButtonColor = 'gray';
+                    config.cancelButtonText = 'Cancelar';
                     break;
                 case 'rechazado':
                     config.title = 'Rechazado';
                     config.html = 'Presione <span class="text-success text-bold">Aceptar</span> si ahora puede realizar su asignación.<br />';
                     config.icon = 'error';
+                    config.showConfirmButton = true;
+                    config.showCancelButton = true;
+                    config.showDenyButton = false;
                     config.confirmButtonColor = '#28a745';
                     config.confirmButtonText = 'Aceptar';
+                    config.cancelButtonColor = 'gray';
+                    config.cancelButtonText = "Cancelar";
                     break;
             }
 
             Swal.fire(config).then((result) => {
                 var data = {}
                 console.log(result)
-                if (result.isConfirmed) {
-                    data = { id: id, confirm: confirmado, estado: 1 }
-                } else if (result.dismiss === Swal.DismissReason.cancel) {
-                    data = { id: id, confirm: confirmado, estado: 0 }
+                if (!result.isDismissed) {
+                    if (result.isConfirmed) {
+                        data = { id: id, confirm: confirmado, estado: 1 }
+                    } else if (result.isDenied) {
+                        data = { id: id, confirm: confirmado, estado: 0 }
+                    }
+                    fetchData(data, estadoElement)
                 }
-                fetchData(data, estadoElement)
             });
         });
     });
