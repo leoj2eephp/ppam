@@ -18,5 +18,5 @@ $generos = [1 => "Masculino", 2 => "Femenino"];
     <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'rol')->widget(Select2::class, [
         'data' => ArrayHelper::map(AuthItem::getRoles(), "name", "name"),
-        'options' => ['placeholder' => 'Seleccione un Punto ...'],
+        'options' => ['placeholder' => 'Seleccione un Rol ...'],
     ]) ?>

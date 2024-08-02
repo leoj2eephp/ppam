@@ -108,6 +108,22 @@ class UserController extends BaseRbacController {
         ]);
     }
 
+    public function actionCuenta() {
+        $model = $this->findModel(Yii::$app->user->id);
+        if ($this->request->isPost && $model->load($this->request->post())) {
+            if ($model->save()) {
+                \Yii::$app->session->setFlash("success", "Datos de la cuenta actualizados!");
+                return $this->redirect(["/site/index"]);
+            } else {
+                \Yii::$app->session->setFlash("danger", join($model->getFirstErrors()));
+            }
+        }
+
+        return $this->render('cuenta', [
+            'model' => $model,
+        ]);
+    }
+
     /**
      * Deletes an existing User model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
@@ -128,14 +144,14 @@ class UserController extends BaseRbacController {
             ->groupBy('dia')
             ->orderBy(['dia' => SORT_ASC])
             ->all();
-    
+
         $encargados = User::find()
             ->innerJoin('auth_assignment', 'auth_assignment.user_id = user.id')
             ->where(['auth_assignment.item_name' => "supervisor"])
             ->all();
-    
+
         return $this->render("encargados", ["model" => $model, "encargados" => $encargados]);
-    }    
+    }
 
     public function actionUpdateEncargadoDia() {
         Yii::$app->response->format = Response::FORMAT_JSON;

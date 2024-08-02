@@ -13,6 +13,26 @@ use yii\widgets\ActiveForm;
         </li>
     </ul>
     <ul class="navbar-nav ml-auto">
+        <?php
+            $user = Yii::$app->user->identity;
+            $bienvenido = "Bienvenid";
+            if ($user->genero == 1) {
+                $bienvenido .= "o " . $user->nombreCompleto;
+            } else {
+                $bienvenido .= "a " . $user->nombreCompleto;
+            }
+        ?>
+        <h3><?= $bienvenido ?></h3>
+    </ul>
+    <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+            <?= Html::a(
+                'Mi Cuenta <i class="fas fa-user-circle"></i>',
+                ['user/cuenta'],
+                ['class' => 'btn btn-link user']
+            );
+            ?>
+        </li>
         <li class="nav-item">
             <?php
             $form = ActiveForm::begin([

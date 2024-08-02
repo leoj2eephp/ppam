@@ -6,6 +6,7 @@ use yii\helpers\Url;
 // $this->title = 'PPAM Osorno';
 ?>
 <div class="container-fluid">
+    <?= app\components\Alert::widget() ?>
     <input type="hidden" id="csrf-token" value="<?= Yii::$app->request->getCsrfToken() ?>">
     <h2>Noticias</h2>
     <div class="row">
