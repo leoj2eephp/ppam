@@ -59,12 +59,28 @@ class UserController extends ActiveController {
         return $user->save();
     }
 
+    public function actionUpdateAccount() {
+        $postData = file_get_contents("php://input");
+        $data = json_decode($postData);
+
+        $user = User::findOne($data->user->id);
+        $user->username = $data->user->username;
+        $user->nombre = $data->user->nombre;
+        $user->apellido = $data->user->apellido;
+        $user->apellido_casada = $data->user->apellido_casada;
+        $user->genero = $data->user->genero;
+        $user->telefono = $data->user->telefono;
+        $user->email = $data->user->email;
+        return $user->save();
+    }
+
     public function behaviors() {
         $behaviors = parent::behaviors();
         $behaviors['verbs'] = [
             'class' => VerbFilter::class,
             'actions' => [
                 'login' => ['post'],
+                'update-account' => ['post'],
             ],
         ];
         return $behaviors;
