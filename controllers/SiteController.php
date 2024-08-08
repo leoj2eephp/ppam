@@ -70,9 +70,6 @@ class SiteController extends Controller {
             "(user_id1 = :id OR user_id2 = :id) and fecha >= now()",
             [":id" => Yii::$app->user->id]
         )->all();
-        $user = User::find(["id" => Yii::$app->user->id])->one();
-        $user->ultima_sesion = date('Y-m-d');
-        $user->save();
         return $this->render('index', ["noticias" => $noticias, "asignaciones" => $asignaciones]);
     }
 
@@ -88,6 +85,10 @@ class SiteController extends Controller {
         // $this->layout = 'blank';
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
+            $id = Yii::$app->user->id;
+            if (!User::updateLastSession($id)) {
+                Yii::$app->session->setFlash('error', 'No se pudo registrar inicio de sesión.');
+            }
             return $this->goBack();
         }
         $model->password = '';

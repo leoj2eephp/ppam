@@ -29,6 +29,7 @@ use yii\web\IdentityInterface;
  * @property int $status
  * @property int $created_at
  * @property int $updated_at
+ * @property int $congregacion_id
  * @property string|null $verification_token
  * @property string|null $access_token
  * @property string|null $device_token
@@ -36,6 +37,7 @@ use yii\web\IdentityInterface;
  *
  * @property Asignacion[] $asignacions
  * @property Asignacion[] $asignacions0
+ * @property Congregacion $congregacion
  */
 class User extends ActiveRecord implements IdentityInterface {
     const STATUS_DELETED = 0;
@@ -66,7 +68,7 @@ class User extends ActiveRecord implements IdentityInterface {
         return [
             [['username', 'auth_key', 'password_hash', 'nombre', 'apellido', 'genero', 'telefono', 'email', 'created_at', 'updated_at',], 'required'],
             [['genero', 'status', 'created_at', 'updated_at'], 'integer'],
-            [['ultima_sesion', 'condicion_especial', 'rol'], 'safe'],
+            [['ultima_sesion', 'condicion_especial', 'rol', 'congregacion_id'], 'safe'],
             [['username', 'password_hash', 'password_reset_token', 'email', 'verification_token', 'access_token', 'device_token'], 'string', 'max' => 255],
             [['auth_key'], 'string', 'max' => 32],
             [['nombre', 'apellido', 'apellido_casada'], 'string', 'max' => 45],
@@ -77,6 +79,7 @@ class User extends ActiveRecord implements IdentityInterface {
             ['status', 'default', 'value' => self::STATUS_INACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],
             [['username', 'auth_key', 'created_at', 'updated_at',], 'safe', 'except' => 'create'],
+            [['congregacion_id'], 'exist', 'skipOnError' => true, 'targetClass' => Congregacion::class, 'targetAttribute' => ['congregacion_id' => 'id']],
         ];
     }
 
@@ -93,8 +96,8 @@ class User extends ActiveRecord implements IdentityInterface {
             'nombre' => 'Nombre',
             'apellido' => 'Apellido',
             'apellido_casada' => 'Apellido Casada',
-            'genero' => 'Genero',
-            'telefono' => 'Telefono',
+            'genero' => 'Género',
+            'telefono' => 'Teléfono',
             'ultima_sesion' => 'Ultima Sesion',
             'email' => 'Email',
             'status' => 'Status',
@@ -102,6 +105,7 @@ class User extends ActiveRecord implements IdentityInterface {
             'updated_at' => 'Updated At',
             'verification_token' => 'Verification Token',
             'rol' => 'Rol',
+            'congregacion_id' => 'Congregación',
         ];
     }
 
@@ -127,6 +131,15 @@ class User extends ActiveRecord implements IdentityInterface {
      */
     public function getAsignacions0() {
         return $this->hasMany(Asignacion::class, ['user_id2' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Congregacion]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCongregacion() {
+        return $this->hasOne(Congregacion::class, ['id' => 'congregacion_id']);
     }
 
     /**
@@ -359,5 +372,11 @@ class User extends ActiveRecord implements IdentityInterface {
         $auth->revokeAll($this->id);
         $role = $auth->getRole($this->rol);
         $auth->assign($role, $this->id);
+    }
+
+    public static function updateLastSession($id) {
+        $user = User::find(["id" => $id])->one();
+        $user->ultima_sesion = date('Y-m-d');
+        return $user->save();
     }
 }

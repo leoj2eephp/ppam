@@ -4,15 +4,13 @@ use kartik\form\ActiveForm;
 use yii\helpers\Html;
 
 /** @var yii\web\View $this */
-/** @var app\models\Noticia $model */
+/** @var app\models\Congregacion $model */
 
-$this->title = 'Update Noticia: ' . $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Noticias', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->title = 'Crear Congregación';
+$this->params['breadcrumbs'][] = ['label' => 'Congregaciones', 'url' => ['index']];
+$this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="noticia-update">
-
+<div class="congregacion-create">
     <div class="card card-info">
         <div class="card-header with-border">
             <h3 class="card-title"><?= Html::encode($this->title) ?></h3>
@@ -32,6 +30,7 @@ $this->params['breadcrumbs'][] = 'Update';
         ]);
         ?>
         <div class="card-body">
+            <?= app\components\Alert::widget() ?>
             <?=
             $this->render('_form', [
                 'model' => $model,
@@ -40,9 +39,8 @@ $this->params['breadcrumbs'][] = 'Update';
             ?>
         </div>
         <div class="card-footer">
-            <?= Html::submitButton('Actualizar', ['class' => 'btn btn-success']) ?>
+            <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
         </div>
         <?php ActiveForm::end(); ?>
     </div>
-
 </div>

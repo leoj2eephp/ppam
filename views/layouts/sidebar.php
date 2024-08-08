@@ -41,9 +41,14 @@ use yii\helpers\Url;
                     [
                         'label' => 'Encargados', 'url' => ['user/encargados'], 'icon' => 'info',
                         'visible' => Yii::$app->user->can("user/encargados") || Yii::$app->user->can("admin")
-                    ], [
+                    ],
+                    [
                         'label' => 'Noticias', 'url' => ['noticia/index'], 'icon' => 'newspaper',
                         'visible' => Yii::$app->user->can("noticia/index") || Yii::$app->user->can("admin")
+                    ],
+                    [
+                        'label' => 'Congregaciones', 'url' => ['congregacion/index'], 'icon' => 'users',
+                        'visible' => Yii::$app->user->can("congregacion/index") || Yii::$app->user->can("admin")
                     ],
                     // ['label' => 'Informational', 'iconStyle' => 'far', 'iconClassAdded' => 'text-info'],
                 ],

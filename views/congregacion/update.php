@@ -4,15 +4,13 @@ use kartik\form\ActiveForm;
 use yii\helpers\Html;
 
 /** @var yii\web\View $this */
-/** @var app\models\Noticia $model */
+/** @var app\models\Congregacion $model */
 
-$this->title = 'Update Noticia: ' . $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Noticias', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->title = 'Actualizar Congregación: ' . $model->id;
+$this->params['breadcrumbs'][] = ['label' => 'Congregaciones', 'url' => ['index']];
+$this->params['breadcrumbs'][] = 'Actualizar';
 ?>
-<div class="noticia-update">
-
+<div class="congregacion-update">
     <div class="card card-info">
         <div class="card-header with-border">
             <h3 class="card-title"><?= Html::encode($this->title) ?></h3>

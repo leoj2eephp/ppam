@@ -47,13 +47,24 @@ if (Yii::$app->authManager->checkAccess(Yii::$app->user->id, "supervisor")) {
                             return $model->genero == 1 ? "Masculino" : "Femenino";
                         }
                     ], */
-                    'telefono',
+                    // telefono',
+                    [
+                        'attribute' => 'congregacion',
+                        'label' => 'Congregación',
+                        'format' => 'html',
+                        'value' => function ($model) {
+                            return isset($model->congregacion) ? $model->congregacion->nombre : "";
+                        }
+                    ],
                     'email:email',
                     [
                         'attribute' => 'ultima_sesion',
-                        'format' => ['date', 'php:d/m/Y'],
+                        // 'format' => ['date', 'php:d/m/Y'],
                         'label' => 'Última Sesión',
-                    ],
+                        'value' => function ($model) {
+                            return $model->ultima_sesion ? Yii::$app->formatter->asRelativeTime($model->ultima_sesion) : 'Nunca ha ingresado';
+                        },
+                    ],                    
                     [
                         'attribute' => 'status',
                         'label' => 'Estado',
@@ -70,6 +81,11 @@ if (Yii::$app->authManager->checkAccess(Yii::$app->user->id, "supervisor")) {
                                     return $model->status;
                             }
                         },
+                        'filter' => [
+                            User::STATUS_ACTIVE => 'Activo',
+                            User::STATUS_INACTIVE => 'Inactivo',
+                            User::STATUS_DELETED => 'Deshabilitado',
+                        ],
                     ],
                     // 'created_at:date',
                     [
@@ -78,8 +94,11 @@ if (Yii::$app->authManager->checkAccess(Yii::$app->user->id, "supervisor")) {
                         'buttons' => [
                             'disponibilidad' => function ($url, $model, $key) {
                                 if ($model->username !== "admin") {
-                                    return Html::a('<span class="fas fa-calendar"></span>', 
-                                        ['disponibilidad/update', 'id' => $model->id], ["title" => "Cambiar Disponibilidad"]);
+                                    return Html::a(
+                                        '<span class="fas fa-calendar"></span>',
+                                        ['disponibilidad/update', 'id' => $model->id],
+                                        ["title" => "Cambiar Disponibilidad"]
+                                    );
                                 }
                             },
                         ],
