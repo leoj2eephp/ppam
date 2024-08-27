@@ -53,7 +53,7 @@ class UserSearch extends User {
                 'attributes' => [
                     'id',
                     'username',
-                    'nombre',
+                    'user.nombre',
                     'apellido',
                     'apellido_casada',
                     'congregacion' => [
@@ -89,7 +89,7 @@ class UserSearch extends User {
             ->andFilterWhere(['like', 'auth_key', $this->auth_key])
             ->andFilterWhere(['like', 'password_hash', $this->password_hash])
             ->andFilterWhere(['like', 'password_reset_token', $this->password_reset_token])
-            ->andFilterWhere(['like', 'nombre', $this->nombre])
+            ->andFilterWhere(['like', 'user.nombre', $this->nombre])
             ->andFilterWhere(['like', 'apellido', $this->apellido])
             ->andFilterWhere(['like', 'apellido_casada', $this->apellido_casada])
             ->andFilterWhere(['like', 'telefono', $this->telefono])
