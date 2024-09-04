@@ -61,16 +61,28 @@ class AsignacionController extends BaseRbacController {
             ->all();
         $events = array();
         foreach ($asignaciones as $a) {
+            $estado1 = ["S/C", "Sin confirmar"];
+            $estado2 = ["S/C", "Sin confirmar"];
+            if (isset($a->confirmado1)) {
+                $estado1 = $a->confirmado1 ? ["Conf.", "Confirmado"] : ["Rech.", "Rechazado"];
+            }
+            if (isset($a->confirmado2)) {
+                $estado2 = $a->confirmado2 ? ["Conf.", "Confirmado"] : ["Rech.", "Rechazado"];
+            }
             $e = new EventJS();
             $e->id = $a->id;
-            $e->title = $a->punto->nombre . ' ' . $a->turno->nombre . '
- - ' .
-                $a->user1->nombreCompleto . '
- - ' .
-                $a->user2->nombreCompleto;
+            // $e->title =  . '\n'  ' ' . $a->user1->nombreCompleto . ' ' . $a->user2->nombreCompleto;
+            // $e->title = $a->turno->nombre . " - " . $a->punto->nombre;
+            $e->description = '<div style="text-align: center;"><b>' . $a->punto->nombre . "-" . $a->turno->nombre . '</b></div>' .
+                $e->description = '<div style="text-align: center;"><b>' . Helper::formatToHourMinute($a->turno->desde) .
+                " - " . Helper::formatToHourMinute($a->turno->hasta) . '</b></div>' .
+                '- ' . $a->user1->nombreCompleto . " (" . $estado1[0] . ")<br>" .
+                '- ' . $a->user2->nombreCompleto . " (" . $estado2[0] . ")<br>";
             $e->start = $a->fecha . " " . $a->turno->desde;
             $e->end = $a->fecha . " " . $a->turno->hasta;
             $e->color = $a->punto->color;
+            $e->customAttribute = $this->getCustomAttribute($a->user1->nombreCompleto, $estado1[1]);
+            $e->customAttribute .= $this->getCustomAttribute($a->user2->nombreCompleto, $estado2[1]);
             $e->url = Url::to(["/asignacion/update", "id" => $a->id]);
             // $e->customAttribute = Url::to(["/asignacion/update", "id" => $a->id]);
             $events[] = $e;
@@ -87,6 +99,20 @@ class AsignacionController extends BaseRbacController {
             "puntos" => $puntos,
             "usuarios" => $usuarios
         ]);
+    }
+
+    protected function getCustomAttribute($nombre, $estado) {
+        $color = "";
+        switch ($estado) {
+            case "Sin confirmar":
+                $color = "blue"; break;
+            case "Confirmado":
+                $color = "green"; break;
+            case "Rechazado":
+                $color = "red"; break;
+        }
+
+        return "$nombre - $color (<span style='color: $color !important'>$estado</span>)<br />";
     }
 
     public function actionCrearTurno() {
@@ -205,8 +231,9 @@ class AsignacionController extends BaseRbacController {
             $asignacion = Asignacion::find()->with($join)->where(['id' => $data->id])->one();
             if (isset($asignacion)) {
                 if (($join == "user1" && $asignacion->user1->id !== Yii::$app->user->id) ||
-                    ($join == "user2" && $asignacion->user2->id !== Yii::$app->user->id))
-                return ['success' => false, 'message' => 'No autorizado o asignación no encontrada'];
+                    ($join == "user2" && $asignacion->user2->id !== Yii::$app->user->id)
+                )
+                    return ['success' => false, 'message' => 'No autorizado o asignación no encontrada'];
             }
 
             if (isset($data->confirm)) {
@@ -224,7 +251,7 @@ class AsignacionController extends BaseRbacController {
             return ['success' => false, 'message' => 'Ocurrió un error. ' .  $e->getMessage()];
         }
     }
-    
+
     /**
      * Deletes an existing Asignacion model.
      * If deletion is successful, the browser will be redirected to the 'index' page.

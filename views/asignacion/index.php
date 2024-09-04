@@ -18,6 +18,20 @@ use yii\helpers\Url;
         "options" => ["id" => "calendar",],
         'clientOptions' => [
           'locale' => 'es',
+          'eventRender' => new \yii\web\JsExpression("
+            function(event, element) {
+                element.find('.fc-title').html(event.title + ' ' + event.start);
+                element.find('.fc-content').html(event.description);
+                element.attr('data-extra-info', event.customAttribute);
+
+                element.tooltip({
+                    html: true,
+                    title: event.customAttribute,
+                    container: 'body',
+                    placement: 'top'
+                });
+            }
+          "),
           "dayClick" => new \yii\web\JsExpression('function(date, jsEvent, view) {
                         document.querySelector("#diaSemana").value = date.day() == 0 ? 7 : date.day()
                         document.querySelector("#fechaSelected").value = date.format()

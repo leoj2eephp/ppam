@@ -13,7 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
 // Si está loggeado como supervisor modificar las posibles acciones
 $acciones_permitidas = '{disponibilidad} {update} {delete}';
 if (Yii::$app->authManager->checkAccess(Yii::$app->user->id, "supervisor")) {
-    $acciones_permitidas = '{disponibilidad} {delete}';
+    $acciones_permitidas = '{disponibilidad} {update} {delete}';
 }
 ?>
 <div class="user-index">

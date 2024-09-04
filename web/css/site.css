@@ -240,3 +240,14 @@ input:checked+.slider:before {
 .fc-title {
   white-space: pre-wrap !important;
 }
+
+.tooltip-inner {
+  background-color: #ffffff !important; /* Cambia el fondo a blanco */
+  color: blue !important; /* Cambia el color del texto a negro */
+  border: 1px solid #ccc; /* Puedes agregar un borde si deseas */
+  padding: 10px; /* Ajusta el padding si es necesario */
+}
+
+.tooltip-arrow {
+  border-top-color: #ffffff !important; /* Cambia el color de la flecha del tooltip */
+}
