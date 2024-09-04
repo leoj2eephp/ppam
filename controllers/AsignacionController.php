@@ -105,14 +105,14 @@ class AsignacionController extends BaseRbacController {
         $color = "";
         switch ($estado) {
             case "Sin confirmar":
-                $color = "blue"; break;
+                $color = "text-primary"; break;
             case "Confirmado":
-                $color = "green"; break;
+                $color = "text-success"; break;
             case "Rechazado":
-                $color = "red"; break;
+                $color = "text-danger"; break;
         }
 
-        return "$nombre - $color (<span style='color: $color !important'>$estado</span>)<br />";
+        return "$nombre (<span class='$color text-bold'>$estado</span>)<br />";
     }
 
     public function actionCrearTurno() {
