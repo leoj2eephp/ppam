@@ -59,6 +59,7 @@ class Disponibilidad extends \yii\db\ActiveRecord {
                 'hasta' => $model->turno->hasta,
                 'estado' => $model->turno->estado,
                 'orden' => $model->turno->orden,
+                'solo_domingo' => $model->turno->solo_domingo,
             ];
         };
         $fields['user'] = function ($model) {
