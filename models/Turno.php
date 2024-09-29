@@ -13,6 +13,7 @@ use Yii;
  * @property string $desde
  * @property string $hasta
  * @property int $estado
+ * @property int $solo_domingo
  * @property int|null $orden
  *
  * @property Asignacion[] $asignacions
@@ -33,7 +34,7 @@ class Turno extends \yii\db\ActiveRecord {
     public function rules() {
         return [
             [['nombre', 'desde', 'hasta', 'estado'], 'required'],
-            [['desde', 'hasta'], 'safe'],
+            [['desde', 'hasta', 'solo_domingo'], 'safe'],
             [['estado'], 'integer'],
             [['nombre'], 'string', 'max' => 45],
             // Anula la regla de validación para el escenario 'guardar'
@@ -52,6 +53,7 @@ class Turno extends \yii\db\ActiveRecord {
             'hasta' => 'Hasta',
             'estado' => 'Estado',
             'orden' => 'Orden',
+            'solo_domingo' => 'Solo Domingo',
         ];
     }
 
