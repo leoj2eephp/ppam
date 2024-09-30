@@ -104,6 +104,8 @@ class Asignacion extends \yii\db\ActiveRecord {
                 "nombre" => $model->turno->nombre,
                 "desde" => $model->turno->desde,
                 "hasta" => $model->turno->hasta,
+                "orden" => $model->turno->orden,
+                "solo_domingo" => $model->turno->solo_domingo,
             ];
         };
         
