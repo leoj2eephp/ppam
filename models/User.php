@@ -302,7 +302,7 @@ class User extends ActiveRecord implements IdentityInterface {
             // Mientras exista un usuario con el mismo username, agregar un número al final
             while ($existingUser !== null) {
                 $usernameBase = $usernameBase . $counter;
-                $existingUser = User::find()->where(['username' => $existingUser])->one();
+                $existingUser = User::find()->where(['username' => $usernameBase])->one();
                 $counter++;
             }
 
