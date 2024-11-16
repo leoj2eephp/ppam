@@ -47,14 +47,14 @@ $this->params['breadcrumbs'][] = $this->title;
       <div class="row mt-3 mb-5">
         <div class="col-sm-6">
           <?= $form->field($model, 'user_id1')->widget(Select2::class, [
-            'data' => ArrayHelper::map($usuariosD, "id", "nombre"),
+            'data' => ArrayHelper::map($usuariosD, "id", "nombreCompleto"),
             'options' => ['placeholder' => 'Seleccione un voluntario ...', "class" => "voluntario"],
           ]) ?>
         </div>
 
         <div class="col-sm-6">
           <?= $form->field($model, 'user_id2')->widget(Select2::class, [
-            'data' => ArrayHelper::map($usuariosD, "id", "nombre"),
+            'data' => ArrayHelper::map($usuariosD, "id", "nombreCompleto"),
             'options' => ['placeholder' => 'Seleccione un voluntario ...', "class" => "voluntario"],
           ]) ?>
         </div>
