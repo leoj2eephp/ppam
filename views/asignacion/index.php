@@ -65,7 +65,7 @@ use yii\helpers\Url;
                                     //  return Swal.showValidationMessage("${JSON.stringify(await response.json())}");
                                     return "ERROR";
                                   }
-                                  return response.json();
+                                  return await response.json();
                                 }
                               } catch (error) {
                                 Swal.showValidationMessage("Request failed: ${error}");

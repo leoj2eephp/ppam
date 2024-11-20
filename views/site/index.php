@@ -71,6 +71,7 @@ use yii\helpers\Url;
                                 </h5>
                                 <p class="card-text">
                                     <i class="fas fa-user"></i> <?= $asig->user1->nombreCompleto ?>
+                                    <i class="fas fa-phone-alt"></i> <?= $asig->user1->telefono ?>
                                     <span>
                                         | <?php
                                             $spanEstado = "";
@@ -93,6 +94,7 @@ use yii\helpers\Url;
                                 </p>
                                 <p>
                                     <i class="fas fa-user"></i> <?= $asig->user2->nombreCompleto ?>
+                                    <i class="fas fa-phone-alt"></i> <?= $asig->user2->telefono ?>
                                     <span>
                                         | <?php
                                             $spanEstado = "";
