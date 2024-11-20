@@ -12,9 +12,11 @@ use yii\helpers\Url;
             <div class="card card-animada">
                 <div class="card-header">
                     <?= Dias::getDayName($dato->dia) ?>
-                    <span class="text-white edit-icon" data-id="<?= $dato->dia ?>">
-                        <i class="fas fa-edit"></i>
-                    </span>
+                    <?php if (Yii::$app->user->can("user/edit-encargados")) : ?>
+                        <span class="text-white edit-icon" data-id="<?= $dato->dia ?>">
+                            <i class="fas fa-edit"></i>
+                        </span>
+                    <?php endif; ?>
                 </div>
                 <div class="card-body">
                     <h5 class="card-title" id="nombre_<?= $dato->dia ?>"><?= $dato->user->nombreCompleto ?? "Sin Encargado" ?></h5>
