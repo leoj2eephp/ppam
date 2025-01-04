@@ -105,11 +105,14 @@ class AsignacionController extends BaseRbacController {
         $color = "";
         switch ($estado) {
             case "Sin confirmar":
-                $color = "text-primary"; break;
+                $color = "text-primary";
+                break;
             case "Confirmado":
-                $color = "text-success"; break;
+                $color = "text-success";
+                break;
             case "Rechazado":
-                $color = "text-danger"; break;
+                $color = "text-danger";
+                break;
         }
 
         return "$nombre (<span class='$color text-bold'>$estado</span>)<br />";
@@ -259,10 +262,14 @@ class AsignacionController extends BaseRbacController {
      * @return \yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id) {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
+    public function actionDelete() {
+        $id = $this->request->post("id") ?? null;
+        if ($id !== null) {
+            $this->findModel($id)->delete();
+            return $this->redirect(['index']);
+        }
+        
+        return $this->redirect(Yii::$app->request->referrer);
     }
 
     /**

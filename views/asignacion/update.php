@@ -4,6 +4,7 @@ use kartik\form\ActiveForm;
 use kartik\select2\Select2;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
+use yii\helpers\Url;
 
 /** @var yii\web\View $this */
 /** @var app\models\Asignacion $model */
@@ -19,7 +20,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php
     $form = ActiveForm::begin([
       'formConfig' => [
-        'labelSpan' => 3, 'deviceSize' => ActiveForm::SIZE_LARGE
+        'labelSpan' => 3,
+        'deviceSize' => ActiveForm::SIZE_LARGE
       ],
       'fieldConfig' => [
         'options' => [
@@ -70,10 +72,13 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="card-footer">
   <?= Html::a('Volver', ["/asignacion/index"], ['class' => 'btn btn-info']) ?>
   <?= Html::submitButton('Actualizar', ['class' => 'btn btn-success']) ?>
+  <button id="delete" class="btn btn-danger" data-id="<?= $model->id ?>" type="button">Eliminar</button>
 </div>
-<?php ActiveForm::end(); ?>
-</div>
-</div>
+<?php ActiveForm::end(); $csrfToken = Yii::$app->request->csrfToken; ?>
+<form id="deleteForm" action="<?= Url::to("delete") ?>" method="POST" style="display: none;">
+  <input type="hidden" name="_csrf" value="<?= $csrfToken ?>">
+  <input type="hidden" name="id" id="hiddenId">
+</form>
 <?php
 $script = <<< JS
     const noDisponibles = $usuariosND
@@ -103,6 +108,27 @@ $script = <<< JS
     }
 
     agregarUsuariosNoDisponibles()
+
+    const deleteButton = document.querySelector("#delete")
+    deleteButton.addEventListener("click", () => {
+      event.preventDefault();
+      const asignacionId = event.target.getAttribute('data-id');
+      Swal.fire({
+        title: '¿Está seguro que quiere eliminar esta asignación?',
+        text: "Esta acción no se puede deshacer.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          document.getElementById('hiddenId').value = asignacionId;
+          document.getElementById('deleteForm').submit();
+        }
+      });
+    });
     
 JS;
 
