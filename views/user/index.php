@@ -47,7 +47,7 @@ if (Yii::$app->authManager->checkAccess(Yii::$app->user->id, "supervisor")) {
                             return $model->genero == 1 ? "Masculino" : "Femenino";
                         }
                     ], */
-                    // telefono',
+                    "telefono",
                     [
                         'attribute' => 'congregacion',
                         'label' => 'Congregación',
