@@ -67,7 +67,7 @@ class SiteController extends Controller {
     public function actionIndex() {
         $noticias = Noticia::find()->where("estado = 1")->orderBy("fecha DESC")->all();
         $asignaciones = Asignacion::find()->where(
-            "(user_id1 = :id OR user_id2 = :id) and fecha >= now()",
+            "(user_id1 = :id OR user_id2 = :id) and fecha >= CURDATE()",
             [":id" => Yii::$app->user->id]
         )->all();
         return $this->render('index', ["noticias" => $noticias, "asignaciones" => $asignaciones]);
