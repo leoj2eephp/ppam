@@ -70,8 +70,8 @@ use yii\helpers\Url;
                                     (<?= Helper::formatToHourMinute($asig->turno->desde) ?>-<?= Helper::formatToHourMinute($asig->turno->hasta) ?>)
                                 </h5>
                                 <p class="card-text">
-                                    <i class="fas fa-user"></i> <?= $asig->user1->nombreCompleto ?>
-                                    <i class="fas fa-phone-alt"></i> <?= $asig->user1->telefono ?>
+                                    <i class="fas fa-user"></i> <span class="d-inline-block"><?= $asig->user1->nombreCompleto ?></span><br>
+                                    <i class="fas fa-phone-alt"></i> <span><?= $asig->user1->telefono ?></span>
                                     <span>
                                         | <?php
                                             $spanEstado = "";
@@ -93,8 +93,8 @@ use yii\helpers\Url;
                                     </span>
                                 </p>
                                 <p>
-                                    <i class="fas fa-user"></i> <?= $asig->user2->nombreCompleto ?>
-                                    <i class="fas fa-phone-alt"></i> <?= $asig->user2->telefono ?>
+                                    <i class="fas fa-user"></i> <span class="d-inline-block"></i> <?= $asig->user2->nombreCompleto ?></span><br>
+                                    <i class="fas fa-phone-alt"></i> <span><?= $asig->user2->telefono ?></span>
                                     <span>
                                         | <?php
                                             $spanEstado = "";
@@ -102,13 +102,13 @@ use yii\helpers\Url;
                                             $datos = 'data-id="' . $asig->id . '" data-confirm="2"';
                                             if (!isset($asig->confirmado2)) {
                                                 $spanEstado = "<span class='text-info " . $estado . " sin-confirmar text-bold' 
-                                                data-estado='sin-confirmar' " . $datos . ">Sin confirmar ";
+                                        data-estado='sin-confirmar' " . $datos . ">Sin confirmar ";
                                             } else if ($asig->confirmado2) {
                                                 $spanEstado = "<span class='text-success " . $estado . " confirmar text-bold'
-                                                data-estado='confirmado' " . $datos . ">Confirmado ";
+                                        data-estado='confirmado' " . $datos . ">Confirmado ";
                                             } else {
                                                 $spanEstado = "<span class='text-danger " . $estado . " rechazar text-bold'
-                                                data-estado='rechazado' " . $datos . ">Rechazado ";
+                                        data-estado='rechazado' " . $datos . ">Rechazado ";
                                             } ?>
                                         <?php $asig->user2->id == Yii::$app->user->id ?
                                             $spanEstado .= "<i class='fas fa-edit link text-info'></i></span>" : "</span>" ?>

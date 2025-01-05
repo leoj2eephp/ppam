@@ -373,7 +373,8 @@ class User extends ActiveRecord implements IdentityInterface {
     }
 
     public function getNombreCompleto() {
-        return $this->nombre . " " . $this->apellido;
+        return $this->genero == 1 ? $this->nombre . " " . $this->apellido :
+                $this->nombre . " " . $this->apellido . " de " . $this->apellido_casada;
     }
 
     public static function getUserRolesById($userId) {
