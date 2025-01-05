@@ -28,8 +28,13 @@ class UserController extends ActiveController {
             $user->access_token = $token;
             $user->save();
             $user->limitInfo();
+
+            // Obtengo los roles para saber si es supervisor o usuario normal
+            $roles = User::getUserRolesById($user->id);
+            $user->rol = $roles ? $roles[0] : null;
             return [
                 'status' => 'success',
+                "rol" => $user->rol,
                 'token' => $token,
                 'user' => $user,
             ];

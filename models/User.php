@@ -367,6 +367,14 @@ class User extends ActiveRecord implements IdentityInterface {
         return $this->nombre . " " . $this->apellido;
     }
 
+    public static function getUserRolesById($userId) {
+        $authManager = Yii::$app->authManager;
+        $roles = $authManager->getRolesByUser($userId);   
+        // Si quieres solo los nombres de los roles
+        $roleNames = array_keys($roles);
+        return $roleNames;
+    }
+
     public function updateRol() {
         $auth = Yii::$app->authManager;
         $auth->revokeAll($this->id);
