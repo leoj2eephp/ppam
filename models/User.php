@@ -3,7 +3,6 @@
 namespace app\models;
 
 use app\components\Helper;
-use app\components\Mailer;
 use Exception;
 use Yii;
 use yii\base\NotSupportedException;
@@ -30,6 +29,7 @@ use yii\web\IdentityInterface;
  * @property int $created_at
  * @property int $updated_at
  * @property int $congregacion_id
+ * @property string|null $rol
  * @property string|null $verification_token
  * @property string|null $access_token
  * @property string|null $device_token
@@ -113,6 +113,15 @@ class User extends ActiveRecord implements IdentityInterface {
         $scenarios = parent::scenarios();
         $scenarios['limitedInfo'] = ['username', 'email', 'nombre', 'apellido', 'apellido_casada', 'genero', 'telefono'];
         return $scenarios;
+    }
+
+    public function fields()
+    {
+        $fields = parent::fields();
+        $fields['rol'] = function ($model) {
+            return $model->rol;
+        };
+        return $fields;
     }
 
     /**
