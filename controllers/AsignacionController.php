@@ -176,6 +176,8 @@ class AsignacionController extends BaseRbacController {
         $model = $this->findModel($id);
 
         if ($this->request->isPost && $model->load($this->request->post())) {
+            $model->confirmado1 = $model->confirmado1 == -1 ? null : $model->confirmado1;
+            $model->confirmado2 = $model->confirmado2 == -1 ? null : $model->confirmado2;
             if ($model->save()) {
                 return $this->redirect(["index"]);
             }

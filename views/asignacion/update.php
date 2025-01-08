@@ -10,6 +10,16 @@ use yii\helpers\Url;
 /** @var app\models\Asignacion $model */
 $this->title = "Actualizar Asignación " . $model->id;
 $this->params['breadcrumbs'][] = $this->title;
+
+$estados = [
+  ["id" => "-1", "nombre" => "Sin Confirmar"],
+  ["id" => "1", "nombre" => "Confirmado"],
+  ["id" => "0", "nombre" => "Rechazado"]
+];
+
+$model->confirmado1 = $model->confirmado1 ?? -1;
+$model->confirmado2 = $model->confirmado2 ?? -1;
+
 ?>
 <div class="disponibilidad-update">
 
@@ -46,7 +56,7 @@ $this->params['breadcrumbs'][] = $this->title;
           ]) ?>
         </div>
       </div>
-      <div class="row mt-3 mb-5">
+      <div class="row mt-3">
         <div class="col-sm-6">
           <?= $form->field($model, 'user_id1')->widget(Select2::class, [
             'data' => ArrayHelper::map($usuariosD, "id", "nombreCompleto"),
@@ -58,6 +68,21 @@ $this->params['breadcrumbs'][] = $this->title;
           <?= $form->field($model, 'user_id2')->widget(Select2::class, [
             'data' => ArrayHelper::map($usuariosD, "id", "nombreCompleto"),
             'options' => ['placeholder' => 'Seleccione un voluntario ...', "class" => "voluntario"],
+          ]) ?>
+        </div>
+      </div>
+      <div class="row mt-3 mb-5">
+        <div class="col-sm-6">
+          <?= $form->field($model, 'confirmado1')->widget(Select2::class, [
+            'data' => ArrayHelper::map($estados, "id", "nombre"),
+            'options' => ['placeholder' => 'Cambiar estado asignación ...', "class" => "estado"],
+          ]) ?>
+        </div>
+
+        <div class="col-sm-6">
+          <?= $form->field($model, 'confirmado2')->widget(Select2::class, [
+            'data' => ArrayHelper::map($estados, "id", "nombre"),
+            'options' => ['placeholder' => 'Cambiar estado asignación ...', "class" => "estado"],
           ]) ?>
         </div>
       </div>
@@ -74,7 +99,8 @@ $this->params['breadcrumbs'][] = $this->title;
   <?= Html::submitButton('Actualizar', ['class' => 'btn btn-success']) ?>
   <button id="delete" class="btn btn-danger" data-id="<?= $model->id ?>" type="button">Eliminar</button>
 </div>
-<?php ActiveForm::end(); $csrfToken = Yii::$app->request->csrfToken; ?>
+<?php ActiveForm::end();
+$csrfToken = Yii::$app->request->csrfToken; ?>
 <form id="deleteForm" action="<?= Url::to("delete") ?>" method="POST" style="display: none;">
   <input type="hidden" name="_csrf" value="<?= $csrfToken ?>">
   <input type="hidden" name="id" id="hiddenId">
