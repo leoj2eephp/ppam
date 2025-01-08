@@ -66,11 +66,13 @@ class SiteController extends Controller {
      */
     public function actionIndex() {
         $noticias = Noticia::find()->where("estado = 1")->orderBy("fecha DESC")->all();
-        $asignaciones = Asignacion::find()->where(
+        $misAsignaciones = Asignacion::find()->where(
             "(user_id1 = :id OR user_id2 = :id) and fecha >= CURDATE()",
             [":id" => Yii::$app->user->id]
         )->all();
-        return $this->render('index', ["noticias" => $noticias, "asignaciones" => $asignaciones]);
+        $asignacionesHoy = Asignacion::find()->where("fecha = CURDATE()")->all();
+        return $this->render('index',
+            ["noticias" => $noticias, "asignaciones" => $misAsignaciones, "asignacionesHoy" => $asignacionesHoy]);
     }
 
     /**
@@ -108,11 +110,11 @@ class SiteController extends Controller {
                 Yii::$app->session->setFlash('error', 'No se pudo enviar el correo electrónico.');
             }
         }
-    
+
         return $this->render('passwordReset', [
             'model' => $model,
         ]);
-    }    
+    }
 
     public function actionResetPassword($token) {
         try {

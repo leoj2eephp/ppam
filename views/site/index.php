@@ -125,6 +125,97 @@ use yii\helpers\Url;
         }
         ?>
     </div>
+
+    <?php if (Yii::$app->user->can('supervisor')) : ?>
+        <h2>Asignaciones para Hoy</h2>
+        <div class="row">
+            <?php
+            if (count($asignacionesHoy) == 0) { ?>
+                <div class="col-12 col-md-6">
+                    <div class="card">
+                        <div class="card-body-info card-animada d-flex">
+                            <div class="info-icon bg-warning text-white d-flex align-items-center justify-content-center mr-1">
+                                <i class="fas fa-exclamation"></i>
+                            </div>
+                            <div class="info-content">
+                                <h5 class="card-title">Sin Asignaciones</h5>
+                                <p class="card-text">
+                                    Por el momento no ha recibido asignaciones para trabajar en PPAM Osorno.
+                                    Verifique su Disponibilidad <a href="/disponibilidad/update">Aquí</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <?php } else {
+                foreach ($asignacionesHoy as $asig) : ?>
+                    <div class="col-12 col-md-6">
+                        <div class="card">
+                            <div class="card-body-info d-flex">
+                                <div class="info-icon bg-primary text-white d-flex align-items-center justify-content-center mr-1">
+                                    <i class="fas fa-calendar-alt"></i>
+                                </div>
+                                <div class="info-content">
+                                    <h5 class="card-title">
+                                        <?= Helper::formatToLocalDate($asig->fecha) ?> |
+                                        <?= $asig->punto->nombre ?>
+                                        (<?= Helper::formatToHourMinute($asig->turno->desde) ?>-<?= Helper::formatToHourMinute($asig->turno->hasta) ?>)
+                                    </h5>
+                                <p class="card-text">
+                                    <i class="fas fa-user"></i> <span class="d-inline-block"><?= $asig->user1->nombreCompleto ?></span><br>
+                                    <i class="fas fa-phone-alt"></i> <span><?= $asig->user1->telefono ?></span>
+                                    <span>
+                                        | <?php
+                                            $spanEstado = "";
+                                            $estado = "estado";
+                                            $datos = 'data-id="' . $asig->id . '" data-confirm="1" data-supervisor="' . Yii::$app->user->id . '"';
+                                            if (!isset($asig->confirmado1)) {
+                                                $spanEstado = "<span class='text-info " . $estado . " sin-confirmar text-bold' 
+                                                    data-estado='sin-confirmar' " . $datos . ">Sin confirmar ";
+                                            } else if ($asig->confirmado1) {
+                                                $spanEstado = "<span class='text-success " . $estado . " confirmar text-bold'
+                                                    data-estado='confirmado' " . $datos . ">Confirmado ";
+                                            } else {
+                                                $spanEstado = "<span class='text-danger " . $estado . " rechazar text-bold'
+                                                    data-estado='rechazado' " . $datos . ">Rechazado ";
+                                            }
+                                            $spanEstado .= "<i class='fas fa-edit link text-info'></i></span>"; ?>
+                                        <?= $spanEstado ?>
+                                    </span>
+                                </p>
+                                <p>
+                                    <i class="fas fa-user"></i> <span class="d-inline-block"></i> <?= $asig->user2->nombreCompleto ?></span><br>
+                                    <i class="fas fa-phone-alt"></i> <span><?= $asig->user2->telefono ?></span>
+                                    <span>
+                                        | <?php
+                                            $spanEstado = "";
+                                            $estado = "estado";
+                                            $datos = 'data-id="' . $asig->id . '" data-confirm="2" data-supervisor="' . Yii::$app->user->id . '"';
+                                            if (!isset($asig->confirmado2)) {
+                                                $spanEstado = "<span class='text-info " . $estado . " sin-confirmar text-bold' 
+                                        data-estado='sin-confirmar' " . $datos . ">Sin confirmar ";
+                                            } else if ($asig->confirmado2) {
+                                                $spanEstado = "<span class='text-success " . $estado . " confirmar text-bold'
+                                        data-estado='confirmado' " . $datos . ">Confirmado ";
+                                            } else {
+                                                $spanEstado = "<span class='text-danger " . $estado . " rechazar text-bold'
+                                        data-estado='rechazado' " . $datos . ">Rechazado ";
+                                            }
+                                            $spanEstado .= "<i class='fas fa-edit link text-info'></i></span>"; ?>
+                                        <?= $spanEstado ?>
+                                    </span>
+                                </p>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+        <?php
+            endforeach;
+        }
+        ?>
+    </div>
+    <?php endif; ?>
 </div>
 <meta name="base-url" content="<?= Url::to(['/asignacion/confirm-reject']) ?>">
 <?php
@@ -137,6 +228,7 @@ $script = <<< JS
             const estado = this.dataset.estado;
             const id = this.dataset.id;
             const confirmado = this.dataset.confirm;
+            const supervisor = this.dataset.supervisor;
 
             let config = {
                 title: '',
@@ -194,9 +286,9 @@ $script = <<< JS
                 console.log(result)
                 if (!result.isDismissed) {
                     if (result.isConfirmed) {
-                        data = { id: id, confirm: confirmado, estado: 1 }
+                        data = { id: id, confirm: confirmado, estado: 1, supervisor: supervisor }
                     } else if (result.isDenied) {
-                        data = { id: id, confirm: confirmado, estado: 0 }
+                        data = { id: id, confirm: confirmado, estado: 0, supervisor: supervisor }
                     }
                     fetchData(data, estadoElement)
                 }

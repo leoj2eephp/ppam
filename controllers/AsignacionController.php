@@ -235,8 +235,9 @@ class AsignacionController extends BaseRbacController {
             $join = $data->confirm == 1 ? "user1" : "user2";
             $asignacion = Asignacion::find()->with($join)->where(['id' => $data->id])->one();
             if (isset($asignacion)) {
-                if (($join == "user1" && $asignacion->user1->id !== Yii::$app->user->id) ||
-                    ($join == "user2" && $asignacion->user2->id !== Yii::$app->user->id)
+                if ((($join == "user1" && $asignacion->user1->id !== Yii::$app->user->id) ||
+                    ($join == "user2" && $asignacion->user2->id !== Yii::$app->user->id)) &&
+                    !isset($data->supervisor)
                 )
                     return ['success' => false, 'message' => 'No autorizado o asignación no encontrada'];
             }
