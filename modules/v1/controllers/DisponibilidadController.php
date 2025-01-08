@@ -79,7 +79,9 @@ class DisponibilidadController extends ActiveController {
         $data = json_decode($postData);
         $disponibles = Disponibilidad::find()
             ->joinWith(["user", "turno"])
-            ->where("turno_id = :tId AND dia = :dia AND disponibilidad.estado = 1", [":tId" => $data->turno_id, ":dia" => $data->dia])
+            ->where("turno_id = :tId AND dia = :dia AND disponibilidad.estado = 1",
+                 [":tId" => $data->turno_id, ":dia" => $data->dia])
+            ->orderBy(["user.nombre" => SORT_ASC])
             ->all();
 
         return $disponibles;

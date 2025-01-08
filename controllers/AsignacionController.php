@@ -185,12 +185,14 @@ class AsignacionController extends BaseRbacController {
         $puntos = Punto::find()->all();
         $usuariosActivos = User::find()
             ->select(["id", "username", "nombre", "apellido", "apellido_casada", "genero", "telefono", "email"])
-            ->where("status = :estado AND username != 'admin'", [":estado" => User::STATUS_ACTIVE])->all();
+            ->where("status = :estado AND username != 'admin'", [":estado" => User::STATUS_ACTIVE])
+            ->orderBy(["user.nombre" => SORT_ASC])->all();
         $dia = date("w", strtotime($model->fecha));
 
         $disponibles = Disponibilidad::find()
             ->joinWith(["user", "turno"])
             ->where("turno_id = :tId AND dia = :dia AND disponibilidad.estado = 1", [":tId" => $model->turno_id, ":dia" => $dia])
+            ->orderBy(["user.nombre" => SORT_ASC])
             ->groupBy("user_id")
             ->all();
 
