@@ -185,10 +185,14 @@ class AsignacionController extends BaseRbacController {
                     $mensaje = "Ha sido asignado a " . $model->punto->nombre . " a las " . Helper::formatToHourMinute($model->turno->desde) .
                         " hrs. para el día " . Helper::formatToLocalDate($model->fecha) . ". Toque aquí para más detalles.";
                     if ($asignadoOld1 != $model->user_id1) {
+                        $model->confirmado1 = $model->confirmado1 == -1;
+                        $model->save();
                         Helper::sendNotificationPush2("Nuevo turno PPAM", $mensaje, $model->user1->device_token);
                     }
 
                     if ($asignadoOld2 != $model->user_id2) {
+                        $model->confirmado2 = $model->confirmado2 == -1;
+                        $model->save();
                         Helper::sendNotificationPush2("Nuevo turno PPAM", $mensaje, $model->user2->device_token);
                     }
                     return $this->redirect(["index"]);
