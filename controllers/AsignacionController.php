@@ -175,11 +175,24 @@ class AsignacionController extends BaseRbacController {
     public function actionUpdate($id) {
         $model = $this->findModel($id);
 
-        if ($this->request->isPost && $model->load($this->request->post())) {
-            $model->confirmado1 = $model->confirmado1 == -1 ? null : $model->confirmado1;
-            $model->confirmado2 = $model->confirmado2 == -1 ? null : $model->confirmado2;
-            if ($model->save()) {
-                return $this->redirect(["index"]);
+        if ($this->request->isPost) {
+            $asignadoOld1 = $model->user_id1;
+            $asignadoOld2 = $model->user_id2;
+            if ($model->load($this->request->post())) {
+                $model->confirmado1 = $model->confirmado1 == -1 ? null : $model->confirmado1;
+                $model->confirmado2 = $model->confirmado2 == -1 ? null : $model->confirmado2;
+                if ($model->save()) {
+                    $mensaje = "Ha sido asignado a " . $model->punto->nombre . " a las " . Helper::formatToHourMinute($model->turno->desde) .
+                        " hrs. para el día " . Helper::formatToLocalDate($model->fecha) . ". Toque aquí para más detalles.";
+                    if ($asignadoOld1 != $model->user_id1) {
+                        Helper::sendNotificationPush2("Nuevo turno PPAM", $mensaje, $model->user1->device_token);
+                    }
+
+                    if ($asignadoOld2 != $model->user_id2) {
+                        Helper::sendNotificationPush2("Nuevo turno PPAM", $mensaje, $model->user2->device_token);
+                    }
+                    return $this->redirect(["index"]);
+                }
             }
         }
 
@@ -238,7 +251,7 @@ class AsignacionController extends BaseRbacController {
             $asignacion = Asignacion::find()->with($join)->where(['id' => $data->id])->one();
             if (isset($asignacion)) {
                 if ((($join == "user1" && $asignacion->user1->id !== Yii::$app->user->id) ||
-                    ($join == "user2" && $asignacion->user2->id !== Yii::$app->user->id)) &&
+                        ($join == "user2" && $asignacion->user2->id !== Yii::$app->user->id)) &&
                     !isset($data->supervisor)
                 )
                     return ['success' => false, 'message' => 'No autorizado o asignación no encontrada'];
@@ -273,7 +286,7 @@ class AsignacionController extends BaseRbacController {
             $this->findModel($id)->delete();
             return $this->redirect(['index']);
         }
-        
+
         return $this->redirect(Yii::$app->request->referrer);
     }
 
