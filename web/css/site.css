@@ -63,6 +63,12 @@
   text-overflow: ellipsis;
 }
 
+@supports (-webkit-touch-callout: none) {
+  .card-body-info {
+      display: block !important;
+  }
+}
+
 .card-header-login {
   background-color: #543EF3;
   border-top-left-radius: 10px;
