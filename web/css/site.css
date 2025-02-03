@@ -56,17 +56,13 @@
 
 .card-body-info .info-content .card-text {
   overflow: hidden;
+  display: block; /* Cambia de -webkit-box a block */
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   white-space: normal;
   text-overflow: ellipsis;
-}
-
-@supports (-webkit-touch-callout: none) {
-  .card-body-info {
-      display: block !important;
-  }
+  max-height: 3em; /* Ajusta según el tamaño de tu fuente */
 }
 
 .card-header-login {
