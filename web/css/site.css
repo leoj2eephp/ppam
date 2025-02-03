@@ -56,7 +56,6 @@
 
 .card-body-info .info-content .card-text {
   overflow: hidden;
-  display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   white-space: normal;
