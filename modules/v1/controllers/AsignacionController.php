@@ -62,6 +62,15 @@ class AsignacionController extends ActiveController {
         return $asignaciones;
     }
 
+    public function actionAsignacionesPorDia() {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $postData = file_get_contents("php://input");
+        $data = json_decode($postData);
+        $data->fecha = date('Y-m-d', strtotime($data->fecha));
+        $asignaciones = Asignacion::find()->where(["fecha" => $data->fecha])->all();
+        return $asignaciones;
+    }
+
     public function behaviors() {
         $behaviors = parent::behaviors();
         $behaviors['verbs'] = [
@@ -70,7 +79,7 @@ class AsignacionController extends ActiveController {
                 'mis-asignaciones' => ['post'],
                 'mis-proximas-asignaciones' => ['post'],
                 'confirm-reject' => ['post'],
-                'asignaciones-del-dia' => ['post'],
+                'asignaciones-por-dia' => ['post'],
             ],
         ];
         return $behaviors;
