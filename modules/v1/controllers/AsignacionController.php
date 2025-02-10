@@ -41,6 +41,19 @@ class AsignacionController extends ActiveController {
         return "ERROR";
     }
 
+    public function actionDelete() {
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $postData = file_get_contents('php://input');
+        $data = json_decode($postData, true);
+        $id = $data["id"];
+        if ($id !== null) {
+            Asignacion::findOne($id)->delete();
+            return "OK";
+        }
+
+        return "ERROR";
+    }
+
     /**
      * Renders the index view for the module
      * @return string
@@ -107,6 +120,7 @@ class AsignacionController extends ActiveController {
                 'confirm-reject' => ['post'],
                 'asignaciones-por-dia' => ['post'],
                 'crear-turno' => ['post'],
+                'delete' => ['post'],
             ],
         ];
         return $behaviors;
