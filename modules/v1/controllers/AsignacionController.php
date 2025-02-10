@@ -2,6 +2,7 @@
 
 namespace app\modules\v1\controllers;
 
+use app\components\Helper;
 use app\models\Asignacion;
 use Yii;
 use yii\filters\VerbFilter;
@@ -14,6 +15,31 @@ use yii\web\Response;
 class AsignacionController extends ActiveController {
 
     public $modelClass = "app\models\Asignacion";
+
+    public function actionCrearTurno() {
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $postData = file_get_contents('php://input');
+        $data = json_decode($postData, true);
+
+        $asignacion = new Asignacion();
+        $asignacion->fecha = date('Y-m-d', strtotime($data["fecha"]));
+        $asignacion->user_id1 = $data["userId1"];
+        $asignacion->user_id2 = $data["userId2"];
+        $asignacion->turno_id = $data["turnoId"];
+        $asignacion->punto_id = $data["puntoId"];
+        if ($asignacion->save()) {
+            // Levantar notificación
+            $mensaje = "Ha sido asignado a " . $asignacion->punto->nombre . " a las " . Helper::formatToHourMinute($asignacion->turno->desde) .
+                " hrs. para el día " . Helper::formatToLocalDate($asignacion->fecha) . ". Toque aquí para más detalles.";
+            Helper::sendNotificationPush2("Nuevo turno PPAM", $mensaje, $asignacion->user1->device_token);
+            Helper::sendNotificationPush2("Nuevo turno PPAM", $mensaje, $asignacion->user2->device_token);
+            return "OK";
+        } else {
+            return join(", ", $asignacion->firstErrors);
+        }
+
+        return "ERROR";
+    }
 
     /**
      * Renders the index view for the module
@@ -80,6 +106,7 @@ class AsignacionController extends ActiveController {
                 'mis-proximas-asignaciones' => ['post'],
                 'confirm-reject' => ['post'],
                 'asignaciones-por-dia' => ['post'],
+                'crear-turno' => ['post'],
             ],
         ];
         return $behaviors;

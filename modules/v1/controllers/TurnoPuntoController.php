@@ -24,12 +24,22 @@ class TurnoPuntoController extends ActiveController {
         return $turnos;
     }
 
+    public function actionDisponiblePorDia() {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $postData = file_get_contents('php://input');
+        $data = json_decode($postData);
+        $data->fecha = date('Y-m-d', strtotime($data->dia));
+        $turnoPunto = TurnoPunto::find()->where(["dia" => $data->dia])->all();
+        return $turnoPunto;
+    }
+
     public function behaviors() {
         $behaviors = parent::behaviors();
         $behaviors['verbs'] = [
             'class' => VerbFilter::class,
             'actions' => [
                 'encargados' => ['get'],
+                'disponible-por-dia' => ['post'],
             ],
         ];
         return $behaviors;
