@@ -120,7 +120,7 @@ class AsignacionController extends ActiveController {
                 'confirm-reject' => ['post'],
                 'asignaciones-por-dia' => ['post'],
                 'crear-turno' => ['post'],
-                'delete' => ['post'],
+                'delete' => ['post', 'delete'],
             ],
         ];
         return $behaviors;
