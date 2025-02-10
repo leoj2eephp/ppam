@@ -45,7 +45,7 @@ class AsignacionController extends ActiveController {
         Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $postData = file_get_contents('php://input');
         $data = json_decode($postData, true);
-        $id = $data["id"];
+        $id = $data["turnoId"];
         if ($id !== null) {
             Asignacion::findOne($id)->delete();
             return "OK";
