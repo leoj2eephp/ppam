@@ -41,7 +41,7 @@ class AsignacionController extends ActiveController {
         return "ERROR";
     }
 
-    public function actionDelete() {
+    public function actionDeleteTurno() {
         Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $postData = file_get_contents('php://input');
         $data = json_decode($postData, true);
@@ -120,7 +120,7 @@ class AsignacionController extends ActiveController {
                 'confirm-reject' => ['post'],
                 'asignaciones-por-dia' => ['post'],
                 'crear-turno' => ['post'],
-                'delete' => ['post', 'delete'],
+                'delete-turno' => ['post'],
             ],
         ];
         return $behaviors;
