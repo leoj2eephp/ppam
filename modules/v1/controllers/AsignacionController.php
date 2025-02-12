@@ -41,6 +41,28 @@ class AsignacionController extends ActiveController {
         return "ERROR";
     }
 
+    public function actionUpdateTurno() {
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $postData = file_get_contents('php://input');
+        $data = json_decode($postData, true);
+        $data = $data["asignacion"];
+        $asignacion = Asignacion::findOne($data["id"]);
+        $asignacion->fecha = date('Y-m-d', strtotime($data["fecha"]));
+        $asignacion->user_id1 = $data["user_id1"];
+        $asignacion->user_id2 = $data["user_id2"];
+        $asignacion->turno_id = $data["turno_id"];
+        $asignacion->punto_id = $data["punto_id"];
+        $asignacion->confirmado1 = $data["confirmado1"];
+        $asignacion->confirmado2 = $data["confirmado2"];
+        if ($asignacion->save()) {
+            return "OK";
+        } else {
+            return join(", ", $asignacion->firstErrors);
+        }
+        
+        return "ERROR";
+    }
+
     public function actionDeleteTurno() {
         Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $postData = file_get_contents('php://input');
@@ -120,6 +142,7 @@ class AsignacionController extends ActiveController {
                 'confirm-reject' => ['post'],
                 'asignaciones-por-dia' => ['post'],
                 'crear-turno' => ['post'],
+                'update-turno' => ['post'],
                 'delete-turno' => ['post'],
             ],
         ];
