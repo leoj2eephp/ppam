@@ -20,8 +20,18 @@ class UserSearch extends User {
         return [
             [['id', 'genero', 'status', 'created_at', 'updated_at'], 'integer'],
             [[
-                'username', 'auth_key', 'password_hash', 'password_reset_token', 'nombre', 'apellido', 'apellido_casada',
-                'telefono', 'ultima_sesion', 'email', 'verification_token', 'congregacion'
+                'username',
+                'auth_key',
+                'password_hash',
+                'password_reset_token',
+                'nombre',
+                'apellido',
+                'apellido_casada',
+                'telefono',
+                'ultima_sesion',
+                'email',
+                'verification_token',
+                'congregacion'
             ], 'safe'],
         ];
     }

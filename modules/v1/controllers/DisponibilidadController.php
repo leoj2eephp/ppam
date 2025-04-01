@@ -4,6 +4,7 @@ namespace app\modules\v1\controllers;
 
 use app\models\Dias;
 use app\models\Disponibilidad;
+use app\models\User;
 use Yii;
 use yii\db\Query;
 use yii\filters\VerbFilter;
@@ -79,8 +80,8 @@ class DisponibilidadController extends ActiveController {
         $data = json_decode($postData);
         $disponibles = Disponibilidad::find()
             ->joinWith(["user", "turno"])
-            ->where("turno_id = :tId AND dia = :dia AND disponibilidad.estado = 1",
-                 [":tId" => $data->turno_id, ":dia" => $data->dia])
+            ->where("turno_id = :tId AND dia = :dia AND disponibilidad.estado = 1 AND user.status = :status",
+                 [":tId" => $data->turno_id, ":dia" => $data->dia, ":status" => User::STATUS_ACTIVE])
             ->orderBy(["user.nombre" => SORT_ASC])
             ->all();
 

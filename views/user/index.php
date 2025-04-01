@@ -14,6 +14,8 @@ $this->params['breadcrumbs'][] = $this->title;
 $acciones_permitidas = '{disponibilidad} {update} {delete}';
 if (Yii::$app->authManager->checkAccess(Yii::$app->user->id, "supervisor")) {
     $acciones_permitidas = '{disponibilidad} {update} {delete}';
+} else if (Yii::$app->authManager->checkAccess(Yii::$app->user->id, "admin")) {
+    $acciones_permitidas = '{disponibilidad} {update} {status} {delete}';
 }
 ?>
 <div class="user-index">
@@ -85,7 +87,7 @@ if (Yii::$app->authManager->checkAccess(Yii::$app->user->id, "supervisor")) {
                             User::STATUS_ACTIVE => 'Activo',
                             User::STATUS_INACTIVE => 'Inactivo',
                             User::STATUS_DELETED => 'Deshabilitado',
-                        ],
+                        ],                   
                     ],
                     // 'created_at:date',
                     [
@@ -95,9 +97,51 @@ if (Yii::$app->authManager->checkAccess(Yii::$app->user->id, "supervisor")) {
                             'disponibilidad' => function ($url, $model, $key) {
                                 if ($model->username !== "admin") {
                                     return Html::a(
-                                        '<span class="fas fa-calendar"></span>',
+                                        '<span class="fas fa-calendar text-gray"></span>',
                                         ['disponibilidad/update', 'id' => $model->id],
                                         ["title" => "Cambiar Disponibilidad"]
+                                    );
+                                }
+                            },
+                            "status" => function ($url, $model, $key) {
+                                if ($model->status == User::STATUS_ACTIVE) {
+                                    return Html::a(
+                                        '<span class="fas fa-user-slash text-warning"></span>',
+                                        ['inactivar', 'id' => $model->id],
+                                        [
+                                            'title' => 'Inactivar',
+                                            'data' => [
+                                                'confirm' => '¿Está seguro de que desea inactivar este usuario?',
+                                                'method' => 'post',
+                                            ],
+                                        ]
+                                    );
+                                } else {
+                                    return Html::a(
+                                        '<span class="fas fa-user-check text-success"></span>',
+                                        ['activar', 'id' => $model->id],
+                                        [
+                                            'title' => 'Activar',
+                                            'data' => [
+                                                'confirm' => '¿Está seguro de que desea activar este usuario?',
+                                                'method' => 'post',
+                                            ],
+                                        ]
+                                    );
+                                }
+                            },
+                            'delete' => function ($url, $model, $key) {
+                                if ($model->username !== "admin") {
+                                    return Html::a(
+                                        '<span class="fas fa-trash text-danger"></span>',
+                                        ['delete', 'id' => $model->id],
+                                        [
+                                            'title' => 'Eliminar',
+                                            'data' => [
+                                                'confirm' => '¿Está seguro de que desea eliminar este usuario?',
+                                                'method' => 'post',
+                                            ],
+                                        ]
                                     );
                                 }
                             },

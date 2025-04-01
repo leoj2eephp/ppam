@@ -132,9 +132,39 @@ class UserController extends BaseRbacController {
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionDelete($id) {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        try {
+            $model->delete();
+            \Yii::$app->session->setFlash("success", "Usuario eliminado correctamente!");
+        } catch (\Exception $e) {
+            \Yii::$app->session->setFlash("danger", "No se puede eliminar el usuario porque tiene datos asociados.");
+        }
+        // $model->status = User::STATUS_DELETED;
+        // $model->save();
 
         return $this->redirect(['index']);
+    }
+
+    public function actionInactivar($id) {
+        $model = $this->findModel($id);
+        $model->status = User::STATUS_INACTIVE;
+        if ($model->save()) {
+            \Yii::$app->session->setFlash("success", "Usuario inactivado correctamente!");
+        } else {
+            \Yii::$app->session->setFlash("danger", join($model->getFirstErrors()));
+        }
+        return $this->redirect(["index"]);
+    }
+
+    public function actionActivar($id) {
+        $model = $this->findModel($id);
+        $model->status = User::STATUS_ACTIVE;
+        if ($model->save()) {
+            \Yii::$app->session->setFlash("success", "Usuario activado correctamente!");
+        } else {
+            \Yii::$app->session->setFlash("danger", join($model->getFirstErrors()));
+        }
+        return $this->redirect(["index"]);
     }
 
     public function actionEncargados() {
