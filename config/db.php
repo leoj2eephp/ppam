@@ -2,8 +2,8 @@
 
 return [
     'class' => \yii\db\Connection::class,
-    'dsn' => 'mysql:host=localhost;dbname=u971059639_ppam_new',
-    'username' => 'u971059639_ppam_new',
+    'dsn' => 'mysql:host=localhost;dbname=ppam_new',
+    'username' => 'ppam_new',
     'password' => 'G75HnVj#>Aq=',
     'charset' => 'utf8',
 
