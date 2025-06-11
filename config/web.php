@@ -11,11 +11,14 @@ $config = [
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
+        '@web' => '/',  // ← Forzar alias web a raíz
     ],
     'components' => [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => '_UG4XFGx-UOAHorCOPQcLqmRPmMKXjeh',
+            'baseUrl' => '',  // ← Forzar URL base vacía
+            'scriptUrl' => '/index.php',  // ← Script sin /ppam/
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
@@ -57,6 +60,8 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'enableStrictParsing' => false,
+            'baseUrl' => '',  // ← También aquí
+            'scriptUrl' => ''  // ← Y aquí
         ],
     ],
     'modules' => [
