@@ -16,8 +16,14 @@ class TurnoPuntoController extends ActiveController {
     public $modelClass = "app\models\TurnoPunto";
 
     public function actionEncargados() {
-         Yii::$app->response->format = Response::FORMAT_JSON;
-        $turnos = TurnoPunto::find()->groupBy("dia")->orderBy("dia")->all();
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $turnos = TurnoPunto::find()
+            ->select(['dia', 'user_id'])
+            ->with('user')
+            ->where(['not', ['user_id' => null]])
+            ->groupBy("dia, user_id")
+            ->orderBy("dia")
+            ->all();
         foreach ($turnos as $m) {
             $m->fieldsScenario = 'encargados';
         }

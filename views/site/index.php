@@ -4,6 +4,9 @@ use app\components\Helper;
 use yii\helpers\Url;
 
 // $this->title = 'PPAM Osorno';
+$client = new Google\Client();
+$dirPath = getenv('GOOGLE_APPLICATION_CREDENTIALS');
+echo $dirPath;
 ?>
 <div class="container-fluid">
     <?= app\components\Alert::widget() ?>
@@ -161,60 +164,60 @@ use yii\helpers\Url;
                                         <?= $asig->punto->nombre ?>
                                         (<?= Helper::formatToHourMinute($asig->turno->desde) ?>-<?= Helper::formatToHourMinute($asig->turno->hasta) ?>)
                                     </h5>
-                                <p class="card-text">
-                                    <i class="fas fa-user"></i> <span class="d-inline-block"><?= $asig->user1->nombreCompleto ?></span><br>
-                                    <i class="fas fa-phone-alt"></i> <span><?= $asig->user1->telefono ?></span>
-                                    <span>
-                                        | <?php
-                                            $spanEstado = "";
-                                            $estado = "estado";
-                                            $datos = 'data-id="' . $asig->id . '" data-confirm="1" data-supervisor="' . Yii::$app->user->id . '"';
-                                            if (!isset($asig->confirmado1)) {
-                                                $spanEstado = "<span class='text-info " . $estado . " sin-confirmar text-bold' 
+                                    <p class="card-text">
+                                        <i class="fas fa-user"></i> <span class="d-inline-block"><?= $asig->user1->nombreCompleto ?></span><br>
+                                        <i class="fas fa-phone-alt"></i> <span><?= $asig->user1->telefono ?></span>
+                                        <span>
+                                            | <?php
+                                                $spanEstado = "";
+                                                $estado = "estado";
+                                                $datos = 'data-id="' . $asig->id . '" data-confirm="1" data-supervisor="' . Yii::$app->user->id . '"';
+                                                if (!isset($asig->confirmado1)) {
+                                                    $spanEstado = "<span class='text-info " . $estado . " sin-confirmar text-bold' 
                                                     data-estado='sin-confirmar' " . $datos . ">Sin confirmar ";
-                                            } else if ($asig->confirmado1) {
-                                                $spanEstado = "<span class='text-success " . $estado . " confirmar text-bold'
+                                                } else if ($asig->confirmado1) {
+                                                    $spanEstado = "<span class='text-success " . $estado . " confirmar text-bold'
                                                     data-estado='confirmado' " . $datos . ">Confirmado ";
-                                            } else {
-                                                $spanEstado = "<span class='text-danger " . $estado . " rechazar text-bold'
+                                                } else {
+                                                    $spanEstado = "<span class='text-danger " . $estado . " rechazar text-bold'
                                                     data-estado='rechazado' " . $datos . ">Rechazado ";
-                                            }
-                                            $spanEstado .= "<i class='fas fa-edit link text-info'></i></span>"; ?>
-                                        <?= $spanEstado ?>
-                                    </span>
-                                </p>
-                                <p>
-                                    <i class="fas fa-user"></i> <span class="d-inline-block"></i> <?= $asig->user2->nombreCompleto ?></span><br>
-                                    <i class="fas fa-phone-alt"></i> <span><?= $asig->user2->telefono ?></span>
-                                    <span>
-                                        | <?php
-                                            $spanEstado = "";
-                                            $estado = "estado";
-                                            $datos = 'data-id="' . $asig->id . '" data-confirm="2" data-supervisor="' . Yii::$app->user->id . '"';
-                                            if (!isset($asig->confirmado2)) {
-                                                $spanEstado = "<span class='text-info " . $estado . " sin-confirmar text-bold' 
+                                                }
+                                                $spanEstado .= "<i class='fas fa-edit link text-info'></i></span>"; ?>
+                                            <?= $spanEstado ?>
+                                        </span>
+                                    </p>
+                                    <p>
+                                        <i class="fas fa-user"></i> <span class="d-inline-block"></i> <?= $asig->user2->nombreCompleto ?></span><br>
+                                        <i class="fas fa-phone-alt"></i> <span><?= $asig->user2->telefono ?></span>
+                                        <span>
+                                            | <?php
+                                                $spanEstado = "";
+                                                $estado = "estado";
+                                                $datos = 'data-id="' . $asig->id . '" data-confirm="2" data-supervisor="' . Yii::$app->user->id . '"';
+                                                if (!isset($asig->confirmado2)) {
+                                                    $spanEstado = "<span class='text-info " . $estado . " sin-confirmar text-bold' 
                                         data-estado='sin-confirmar' " . $datos . ">Sin confirmar ";
-                                            } else if ($asig->confirmado2) {
-                                                $spanEstado = "<span class='text-success " . $estado . " confirmar text-bold'
+                                                } else if ($asig->confirmado2) {
+                                                    $spanEstado = "<span class='text-success " . $estado . " confirmar text-bold'
                                         data-estado='confirmado' " . $datos . ">Confirmado ";
-                                            } else {
-                                                $spanEstado = "<span class='text-danger " . $estado . " rechazar text-bold'
+                                                } else {
+                                                    $spanEstado = "<span class='text-danger " . $estado . " rechazar text-bold'
                                         data-estado='rechazado' " . $datos . ">Rechazado ";
-                                            }
-                                            $spanEstado .= "<i class='fas fa-edit link text-info'></i></span>"; ?>
-                                        <?= $spanEstado ?>
-                                    </span>
-                                </p>
-                            </div>
+                                                }
+                                                $spanEstado .= "<i class='fas fa-edit link text-info'></i></span>"; ?>
+                                            <?= $spanEstado ?>
+                                        </span>
+                                    </p>
+                                </div>
 
+                            </div>
                         </div>
                     </div>
-                </div>
-        <?php
-            endforeach;
-        }
-        ?>
-    </div>
+            <?php
+                endforeach;
+            }
+            ?>
+        </div>
     <?php endif; ?>
 </div>
 <meta name="base-url" content="<?= Url::to(['/asignacion/confirm-reject']) ?>">

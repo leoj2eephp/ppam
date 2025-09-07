@@ -24,12 +24,14 @@ use yii\helpers\Url;
                 element.find('.fc-content').html(event.description);
                 element.attr('data-extra-info', event.customAttribute);
 
-                element.tooltip({
-                    html: true,
-                    title: event.customAttribute,
-                    container: 'body',
-                    placement: 'top'
-                });
+                if (event.customAttribute) {
+                    element.tooltip({
+                        html: true,
+                        title: event.customAttribute,
+                        container: 'body',
+                        placement: 'top'
+                    });
+                }
             }
           "),
           "dayClick" => new \yii\web\JsExpression('function(date, jsEvent, view) {

@@ -208,18 +208,23 @@ class AsignacionController extends BaseRbacController {
             ->orderBy(["user.nombre" => SORT_ASC])->all();
         $dia = date("w", strtotime($model->fecha));
 
-        $disponibles = Disponibilidad::find()
-            ->joinWith(["user", "turno"])
-            ->where("turno_id = :tId AND dia = :dia AND disponibilidad.estado = 1", [":tId" => $model->turno_id, ":dia" => $dia])
-            ->orderBy(["user.nombre" => SORT_ASC])
-            ->groupBy("user_id")
+        // Obtener los IDs de usuarios disponibles para este turno y día
+        $usuariosDisponiblesIds = Disponibilidad::find()
+            ->select('user_id')
+            ->where([
+                'turno_id' => $model->turno_id,
+                'dia' => $dia,
+                'estado' => 1
+            ])
+            ->column();
+
+        // Obtener los usuarios disponibles
+        $usuariosD = User::find()
+            ->where(['id' => $usuariosDisponiblesIds])
+            ->orderBy(['nombre' => SORT_ASC])
             ->all();
 
-        $usuariosD = [];
         $usuariosND = [];
-        foreach ($disponibles as $d) {
-            $usuariosD[] = $d->user;
-        }
 
         $usuariosId = array_column($usuariosD, 'id');
         foreach ($usuariosActivos as $ua) {
