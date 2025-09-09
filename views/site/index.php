@@ -6,7 +6,6 @@ use yii\helpers\Url;
 // $this->title = 'PPAM Osorno';
 $client = new Google\Client();
 $dirPath = getenv('GOOGLE_APPLICATION_CREDENTIALS');
-echo $dirPath;
 ?>
 <div class="container-fluid">
     <?= app\components\Alert::widget() ?>
